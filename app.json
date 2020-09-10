@@ -1,0 +1,12 @@
+{
+  "name": "ViqScores",
+  "displayName": "ViqScores",
+  "expo": {
+    "name": "ViqScores",
+    "slug": "ViqScores",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
