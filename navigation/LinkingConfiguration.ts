@@ -22,6 +22,9 @@ export default {
               TabTwoScreen: 'two',
             },
           },
+          Match: {
+              Match: 'match',
+          },
         },
       },
       NotFound: '*',

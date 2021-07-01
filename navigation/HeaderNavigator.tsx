@@ -17,7 +17,7 @@ import { BottomTabParamList, MatchParamList, TabOneParamList, TabTwoParamList } 
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
-export default function BottomTabNavigator() {
+export default function HeaderNavigator() {
   const colorScheme = useColorScheme();
 
   return (

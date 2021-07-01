@@ -2,7 +2,7 @@
   "expo": {
     "name": "viq-scores",
     "slug": "viq-scores",
-    "version": "1.0.0",
+    "version": "4.4.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -29,6 +29,7 @@
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
-    }
+    },
+    "description": ""
   }
 }
