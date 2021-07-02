@@ -66,21 +66,21 @@ export const getLeagueStandings = (leagueId: number) => {
 export const getTodaysFixtures = () => {
   try {
     return async (dispatch: any) => {
-      // const res = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${moment().format('YYYY-MM-DD')}`, rapidApiHeaders);
+      const res = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${moment().format('YYYY-MM-DD')}`, rapidApiHeaders);
 
-      // if (res.data) {
-      //   dispatch({
-      //     type: GET_TODAYS_FIXTURES,
-      //     payload: groupFixturesListByLeagueId(res.data.response),
-      //   });
-      // } else {
-      //   console.log('Unable to fetch');
-      // }
+      if (res.data) {
+        dispatch({
+          type: GET_TODAYS_FIXTURES,
+          payload: groupFixturesListByLeagueId(res.data.response),
+        });
+      } else {
+        console.log('Unable to fetch');
+      }
 
-      dispatch({
-        type: GET_TODAYS_FIXTURES,
-        payload: groupFixturesListByLeagueId(data),
-      });
+      // dispatch({
+      //   type: GET_TODAYS_FIXTURES,
+      //   payload: groupFixturesListByLeagueId(data),
+      // });
     };
     // eslint-disable-next-line no-unreachable
   } catch (error) {
@@ -91,24 +91,24 @@ export const getTodaysFixtures = () => {
 export const getFixturesForDate = (date: Date) => {
   try {
     return async (dispatch: any) => {
-      // const res = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${moment(date).format('YYYY-MM-DD')}`, rapidApiHeaders);
+      const res = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${moment(date).format('YYYY-MM-DD')}`, rapidApiHeaders);
 
-      // if (res.data) {
-      //     console.log(groupFixturesListByLeagueId(res.data.response))
-      //   dispatch({
-      //     type: getActionBasedOnDate(date),
-      //     payload: groupFixturesListByLeagueId(res.data.response),
-      //   });
-      // } else {
-      //   console.log('Unable to fetch');
-      // }
+      if (res.data) {
+          console.log(groupFixturesListByLeagueId(res.data.response))
+        dispatch({
+          type: getActionBasedOnDate(date),
+          payload: groupFixturesListByLeagueId(res.data.response),
+        });
+      } else {
+        console.log('Unable to fetch');
+      }
 
       // console.log('fixtures: ' + JSON.stringify(groupFixturesListByLeagueId(data)))
 
-      dispatch({
-        type: getActionBasedOnDate(date),
-        payload: groupFixturesListByLeagueId(pastFixtureData.response),
-      });
+      // dispatch({
+      //   type: getActionBasedOnDate(date),
+      //   payload: groupFixturesListByLeagueId(pastFixtureData.response),
+      // });
 
     };
     // eslint-disable-next-line no-unreachable
@@ -128,21 +128,21 @@ export const getFixtureDetails = (id: number) => {
       // await sleep(10000);
 
 
-      // const res = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/fixtures?id=${id}`, rapidApiHeaders);
+      const res = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/fixtures?id=${id}`, rapidApiHeaders);
 
-      // if (res.data) {
-      //   dispatch({
-      //     type: GET_FIXTURE_DETAILS,
-      //     payload: res.data.response[0]
-      //   });
-      // } else {
-      //   console.log('Unable to fetch');
-      // }
+      if (res.data) {
+        dispatch({
+          type: GET_FIXTURE_DETAILS,
+          payload: res.data.response[0]
+        });
+      } else {
+        console.log('Unable to fetch');
+      }
 
-      dispatch({
-        type: GET_FIXTURE_DETAILS,
-        payload: fixtureData.response[0]
-      });
+      // dispatch({
+      //   type: GET_FIXTURE_DETAILS,
+      //   payload: fixtureData.response[0]
+      // });
     };
     // eslint-disable-next-line no-unreachable
   } catch (error) {
