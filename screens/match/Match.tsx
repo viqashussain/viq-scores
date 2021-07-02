@@ -163,7 +163,7 @@ export default function Match({ route, navigation }) {
 
                                     <LinearGradient
                                         // Background Linear Gradient
-                                        colors={[CUSTOM_COLORS.safetyYellow, 'transparent']}
+                                        colors={[CUSTOM_COLORS.lightSafetyYellow, 'transparent']}
                                         style={styles.matchStatusContainerBackground}
                                     />
 

@@ -143,11 +143,11 @@ export default function TabOneScreen(props: any) {
 
         <LinearGradient
           // Background Linear Gradient
-          colors={[CUSTOM_COLORS.safetyYellow, 'transparent']}
+          colors={[CUSTOM_COLORS.lightSafetyYellow, 'transparent']}
           style={styles.background}
         />
 
-        {/* <Carousel
+        <Carousel
           style={styles.carousel}
           layout={"default"}
           ref={ref => carousel = ref}
@@ -161,7 +161,7 @@ export default function TabOneScreen(props: any) {
           inactiveSlideOpacity={0.75}
           activeSlideAlignment={'center'}
           enableMomentum={true}
-          onSnapToItem={index => dateSelectedNew(index)} /> */}
+          onSnapToItem={index => dateSelectedNew(index)} />
       </View>
       {
         !isLoaded ? (
@@ -221,7 +221,7 @@ export default function TabOneScreen(props: any) {
                       return <View style={{ display: 'flex', flexDirection: 'row' }}>
                         <List.Section style={styles.listSection} key={i}>
                           <List.Accordion
-                            style={{ backgroundColor: CUSTOM_COLORS.safetyYellow }}
+                            style={{ backgroundColor: CUSTOM_COLORS.lightSafetyYellow }}
                             title={x[0].league.name}
                             left={props => <Image style={styles.leagueLogo} source={{ uri: x[0].league.logo }} />}>
                             {x.map((match: any, j: number) => {
