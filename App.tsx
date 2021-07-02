@@ -10,7 +10,6 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { Text, View } from './components/Themed';
-import { Appbar } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 
 
