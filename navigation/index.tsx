@@ -10,6 +10,7 @@ import * as React from 'react';
 import { ColorSchemeName, Image } from 'react-native';
 import { List } from 'react-native-paper';
 import Match from '../screens/match/Match';
+import Standings from '../screens/match/Standings';
 
 import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/TabOneScreen';
@@ -51,6 +52,7 @@ function HomeStackScreen() {
     <HomeStack.Navigator>
       <HomeStack.Screen name="Scores" component={TabOneScreen} options={{ headerTitle: props => <LogoTitle title="Fixtures"/> }} />
       <HomeStack.Screen name="Match" component={Match} options={{ headerTitle: props => <LogoTitle title="Match"/> }} />
+      <HomeStack.Screen name="Standings" component={Standings} options={{ headerTitle: props => <LogoTitle title="Standings"/> }} />
     </HomeStack.Navigator>
   );
 }

@@ -12,8 +12,11 @@ import Lineup from "./Lineup";
 import Bench from "./Bench";
 import { convertUtcDateToLocal } from "../../helpers";
 import MatchStats from "./MatchStats";
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { Fixture, FixtureDetails } from "../../types/types";
+import { CUSTOM_COLORS } from "../../types/colors";
+import { LinearGradient } from "expo-linear-gradient";
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 export default function Match({ route, navigation }) {
 
@@ -52,9 +55,9 @@ export default function Match({ route, navigation }) {
 
     const [index, setIndex] = useState(0);
     const [routes] = useState([
-        { key: 'first', title: 'Events' },
-        { key: 'second', title: 'Lineup' },
-        { key: 'third', title: 'Stats' },
+        { key: 'first', title: 'Events', icon: 'futbol' },
+        { key: 'second', title: 'Lineup', icon: 'list-ol' },
+        { key: 'third', title: 'Stats', icon: 'chart-bar' },
     ]);
 
     const renderScene = ({ route }) => {
@@ -97,6 +100,33 @@ export default function Match({ route, navigation }) {
         }
     };
 
+    const renderTabBar = (props: any) => (
+        <TabBar
+            {...props}
+            indicatorStyle={{ backgroundColor: CUSTOM_COLORS.safetyYellow }}
+            style={{ backgroundColor: CUSTOM_COLORS.aliceBlue }}
+
+            renderLabel={({ route }) => {
+                return (
+                    <View style={{ display: 'flex', flexDirection: 'row', backgroundColor: CUSTOM_COLORS.aliceBlue }}>
+                        <View style={{
+                            alignItems: 'center',
+                            justifyContent: 'flex-start',
+                            flex: 1,
+                            flexDirection: 'row',
+                            backgroundColor: CUSTOM_COLORS.aliceBlue
+                        }}>
+                            <Icon name={route.icon} size={20} color={CUSTOM_COLORS.safetyYellow} />
+                        </View>
+                        <Text style={{ color: 'black', fontWeight: 'bold', margin: 8 }}>
+                            {route.title}
+                        </Text>
+                    </View>
+                )
+            }}
+        />
+    );
+
     const layout = useWindowDimensions();
 
     return (
@@ -114,7 +144,7 @@ export default function Match({ route, navigation }) {
                                     onRefresh={onRefresh}
                                 />} style={styles.scrollView}>
                                 <View style={styles.matchStatusContainer}>
-                                    <Text>{fixtureDetails.fixture.status.long}
+                                    <Text style={[styles.textCenter, styles.fixtureStatusText]}>{fixtureDetails.fixture.status.long}
                                         {fixtureDetails.fixture.status.short === '1H'
                                             || fixtureDetails.fixture.status.short === '2H'
                                             || fixtureDetails.fixture.status.short === 'ET' ?
@@ -123,13 +153,19 @@ export default function Match({ route, navigation }) {
                                 </View>
                                 <Divider />
                                 <View style={styles.matchDetailsContainer}>
-                                    <Text>{convertUtcDateToLocal(fixtureDetails.fixture.date)}</Text>
-                                    <Text>{fixtureDetails.fixture.venue.name}</Text>
-                                    <Text>{fixtureDetails.league.name} ({fixtureDetails.league.round})</Text>
+                                    <Text style={styles.textCenter}>{convertUtcDateToLocal(fixtureDetails.fixture.date)}</Text>
+                                    <Text style={styles.textCenter}>{fixtureDetails.fixture.venue.name}</Text>
+                                    <Text style={styles.textCenter}>{fixtureDetails.league.name} ({fixtureDetails.league.round})</Text>
                                 </View>
                                 <Divider />
 
                                 <View style={styles.teamScoreContainer}>
+
+                                    <LinearGradient
+                                        // Background Linear Gradient
+                                        colors={[CUSTOM_COLORS.safetyYellow, 'transparent']}
+                                        style={styles.matchStatusContainerBackground}
+                                    />
 
                                     <List.Item titleStyle={styles.teamName}
                                         title={`${fixtureDetails.teams.home.name}`}
@@ -149,7 +185,7 @@ export default function Match({ route, navigation }) {
                                                 onIndexChange={setIndex}
                                                 initialLayout={{ width: layout.width }}
                                                 style={{ flex: 1, display: 'flex', height: 1000 }}
-
+                                                renderTabBar={renderTabBar}
                                             />
                                         ) :
                                         (
@@ -209,11 +245,24 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
         justifyContent: 'center',
         display: 'flex',
-        flex: 1
     },
     matchStatusContainer: {
         textAlign: 'center',
         paddingTop: 5,
         paddingBottom: 5,
-    }
+    },
+    textCenter: {
+        textAlign: 'center'
+    },
+    fixtureStatusText: {
+        fontWeight: 'bold',
+        backgroundColor: CUSTOM_COLORS.safetyYellow
+    },
+    matchStatusContainerBackground: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: 120
+    },
 });

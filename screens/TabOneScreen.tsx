@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Image, SafeAreaView, ScrollView, RefreshControl, Dimensions } from 'react-native';
+import { StyleSheet, Image, SafeAreaView, ScrollView, RefreshControl, Dimensions, TouchableHighlight } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Text, View } from '../components/Themed';
 import { getFixturesForDate, getTodaysFixtures } from '../redux/actions';
-import { Divider, List } from 'react-native-paper';
+import { Button, Divider, List } from 'react-native-paper';
 import NotStartedFixture from './fixtures/NotStartedFixture';
 import LiveFixture from './fixtures/LiveFixture';
 import { ActivityIndicator, Colors } from 'react-native-paper';
@@ -18,6 +18,11 @@ import { CUSTOM_COLORS } from '../types/colors';
 import { LinearGradient } from 'expo-linear-gradient';
 import { white } from 'react-native-paper/lib/typescript/styles/colors';
 import { Spinner } from '../components/Spinner';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faCoffee, faTable } from '@fortawesome/free-solid-svg-icons';
+import { Fixture } from '../types/types';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 
 export default function TabOneScreen(props: any) {
@@ -111,9 +116,13 @@ export default function TabOneScreen(props: any) {
   const dateSelectedNew = async (index: number) => {
     setIsLoaded(false);
     setSelectedDate(carouselItems[index].toString());
-    console.warn(selectedDate)
     await fetchFixturesForDate(new Date(selectedDate));
     setIsLoaded(true);
+  }
+
+  const goToStandings = (match: any) => {
+    console.log('e')
+    props.navigation.navigate('Standings', { leagueId: props.match });
   }
 
   const dateCalendarItem = ({ item, index }) => {
@@ -134,11 +143,11 @@ export default function TabOneScreen(props: any) {
 
         <LinearGradient
           // Background Linear Gradient
-          colors={[CUSTOM_COLORS.gold, 'transparent']}
-        style={styles.background}
+          colors={[CUSTOM_COLORS.safetyYellow, 'transparent']}
+          style={styles.background}
         />
 
-        <Carousel
+        {/* <Carousel
           style={styles.carousel}
           layout={"default"}
           ref={ref => carousel = ref}
@@ -152,7 +161,7 @@ export default function TabOneScreen(props: any) {
           inactiveSlideOpacity={0.75}
           activeSlideAlignment={'center'}
           enableMomentum={true}
-          onSnapToItem={index => dateSelectedNew(index)} />
+          onSnapToItem={index => dateSelectedNew(index)} /> */}
       </View>
       {
         !isLoaded ? (
@@ -197,49 +206,69 @@ export default function TabOneScreen(props: any) {
                 /> */}
 
 
-                  <View>
+                  <View style={styles.dateContainer}>
                     <Text style={styles.title}>{moment().format('LL')} Fixtures</Text>
                   </View>
 
-
                   <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-                  {fixtures.map((x: any, i: number) => {
-                    // if (i > 0) {
-                    //   return;
-                    // }
-                    return <List.Section key={i}>
-                      <List.Accordion
-                        title={x[0].league.name}
-                        left={props => <Image style={styles.leagueLogo} source={{ uri: x[0].league.logo }} />}>
-                        {x.map((match: any, j: number) => {
-                          if (match.fixture.status.short === 'NS') {
-                            return (
-                              <NotStartedFixture navigation={props.navigation} key={j} match={match} />
-                            )
-                          }
-                          else if (match.fixture.status.short === '1H' || match.fixture.status.short === '2H' || match.fixture.status.short === 'ET' || match.fixture.status.short === 'P' || match.fixture.status.short === 'BT') {
-                            return (
-                              <LiveFixture navigation={props.navigation} key={j} match={match} />
-                            )
-                          }
-                          else if (match.fixture.status.short === 'HT' || match.fixture.status.short === 'FT'
-                            || match.fixture.status.short === 'AET' || match.fixture.status.short === 'PEN') {
-                            return (
-                              <FinishedFixture navigation={props.navigation} key={j} match={match} />
-                            )
-                          }
-                          else if (match.fixture.status.short === 'TBD' || match.fixture.status.short === 'SUSP'
-                            || match.fixture.status.short === 'INT' || match.fixture.status.short === 'PST'
-                            || match.fixture.status.short === 'CANC' || match.fixture.status.short === 'ABD'
-                            || match.fixture.status.short === 'AWD' || match.fixture.status.short === 'WO') {
-                            return (
-                              <MiscFixture navigation={props.navigation} key={j} match={match} />
-                            )
-                          }
-                        })}
-                      </List.Accordion>
-                    </List.Section>
-                  })}
+
+                  <View>
+
+                    {fixtures.map((x: Fixture[], i: number) => {
+                      // if (i > 0) {
+                      //   return;
+                      // }
+                      return <View style={{ display: 'flex', flexDirection: 'row' }}>
+                        <List.Section style={styles.listSection} key={i}>
+                          <List.Accordion
+                            style={{ backgroundColor: CUSTOM_COLORS.safetyYellow }}
+                            title={x[0].league.name}
+                            left={props => <Image style={styles.leagueLogo} source={{ uri: x[0].league.logo }} />}>
+                            {x.map((match: any, j: number) => {
+                              if (match.fixture.status.short === 'NS') {
+                                return (
+                                  <NotStartedFixture navigation={props.navigation} key={j} match={match} />
+                                )
+                              }
+                              else if (match.fixture.status.short === '1H' || match.fixture.status.short === '2H' || match.fixture.status.short === 'ET' || match.fixture.status.short === 'P' || match.fixture.status.short === 'BT') {
+                                return (
+                                  <LiveFixture navigation={props.navigation} key={j} match={match} />
+                                )
+                              }
+                              else if (match.fixture.status.short === 'HT' || match.fixture.status.short === 'FT'
+                                || match.fixture.status.short === 'AET' || match.fixture.status.short === 'PEN') {
+                                return (
+                                  <FinishedFixture navigation={props.navigation} key={j} match={match} />
+                                )
+                              }
+                              else if (match.fixture.status.short === 'TBD' || match.fixture.status.short === 'SUSP'
+                                || match.fixture.status.short === 'INT' || match.fixture.status.short === 'PST'
+                                || match.fixture.status.short === 'CANC' || match.fixture.status.short === 'ABD'
+                                || match.fixture.status.short === 'AWD' || match.fixture.status.short === 'WO') {
+                                return (
+                                  <MiscFixture navigation={props.navigation} key={j} match={match} />
+                                )
+                              }
+                            })}
+                          </List.Accordion>
+
+
+                        </List.Section>
+
+                        <View>
+                          <TouchableHighlight style={{ display: 'flex' }} onPress={() => goToStandings(x[0].league.id)}>
+                            {/* <FontAwesomeIcon style={{ height: 20 }} icon={faTable} /> */}
+                            <Button>
+                              <Icon name="table" size={50} color={CUSTOM_COLORS.safetyYellow} />
+
+                            </Button>
+                          </TouchableHighlight>
+                        </View>
+                      </View>
+                    })}
+
+                  </View>
+
                 </ScrollView>
               </SafeAreaView>
             </View>
@@ -269,7 +298,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 20,
     paddingBottom: 20,
-    backgroundColor: CUSTOM_COLORS.gold,
+    backgroundColor: CUSTOM_COLORS.safetyYellow,
     textAlign: 'center',
     display: 'flex',
   },
@@ -280,20 +309,30 @@ const styles = StyleSheet.create({
     top: 0,
     height: 90
   },
+  mainLinearGradient: {
+    height: 1000,
+    left: 0,
+    right: 0,
+    top: 0,
+    position: 'absolute',
+  },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center'
   },
+  dateContainer: {
+    paddingTop: 10
+  },
   separator: {
-    marginVertical: 30,
+    marginVertical: 10,
     height: 1,
   },
   leagueLogo: {
-    flex: 1,
     height: 40,
     width: 40,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
+    // flex: 'inherit' 
   },
   carousel: {
     height: 300,
@@ -325,5 +364,12 @@ const styles = StyleSheet.create({
   },
   slideStyle: {
     // scaleY: 2
+  },
+  listSection: {
+    // width: '80%',
+    display: 'flex',
+    paddingLeft: 20,
+    paddingRight: 20,
+    flex: 1,
   }
 });

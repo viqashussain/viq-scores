@@ -289,3 +289,41 @@ export interface Fixture {
     statistics: Statistic[];
     players: Player4[];
 }
+
+
+export interface League {
+    id: number;
+    name: string;
+    country: string;
+    logo: string;
+    flag: string;
+    season: number;
+    standings: Standing[][];
+}
+
+export interface Standing {
+    rank:        number;
+    team:        Team;
+    points:      number;
+    goalsDiff:   number;
+    group:       string;
+    form:        string;
+    status:      Status;
+    description: null | string;
+    all:         GamesWonLostDrawn;
+    home:        GamesWonLostDrawn;
+    away:        GamesWonLostDrawn;
+    update:      Date;
+}
+
+export interface GamesWonLostDrawn {
+    played: number;
+    win:    number;
+    draw:   number;
+    lose:   number;
+    goals:  { for: number, against: number };
+}
+
+export interface Response {
+    league: League;
+}

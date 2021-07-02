@@ -4,6 +4,7 @@ import { View, Text } from '../../components/Themed';
 import { StyleSheet, Image, TouchableHighlight } from 'react-native';
 import { convertUtcDateToLocalTime } from '../../helpers';
 import { Fixture } from '../../types/types';
+import FixtureLinearGradient from './FixtureLinearGradient';
 
 
 export default function NotStartedFixture(props: { match: Fixture, navigation: any }) {
@@ -15,16 +16,18 @@ export default function NotStartedFixture(props: { match: Fixture, navigation: a
     return (
         <TouchableHighlight onPress={() => matchSelected(props.match)}>
             <View style={styles.container}>
-        <View style={styles.teamsContainer}>
-                <List.Item style={styles.listItem} title={`${props.match.teams.home.name}`} titleStyle={styles.teamName}
-            left={x => <Image style={styles.logoImage} source={{ uri: props.match.teams.home.logo }} />}
-             />
-             <List.Item style={styles.listItem} title={`${props.match.teams.away.name}`} titleStyle={styles.teamName}
-            left={x => <Image style={styles.logoImage} source={{ uri: props.match.teams.away.logo }} />}
+                <View style={styles.teamsContainer}>
+                    <FixtureLinearGradient />
+                    <List.Item style={styles.listItem} title={`${props.match.teams.home.name}`} titleStyle={styles.teamName}
+                        left={x => <Image style={styles.logoImage} source={{ uri: props.match.teams.home.logo }} />}
+                    />
+                    <List.Item style={styles.listItem} title={`${props.match.teams.away.name}`} titleStyle={styles.teamName}
+                        left={x => <Image style={styles.logoImage} source={{ uri: props.match.teams.away.logo }} />}
 
-             />
+                    />
                 </View>
                 <View style={styles.matchStatusContainer}>
+                    <FixtureLinearGradient />
                     <Text style={styles.matchStatus}>{convertUtcDateToLocalTime(props.match.fixture.date.toString())}</Text>
                 </View>
             </View>
@@ -38,7 +41,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flex: 1,
         borderBottomColor: '#dbdbdb',
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        paddingTop: 5
     },
     teamsContainer: {
         display: 'flex',
@@ -52,9 +56,9 @@ const styles = StyleSheet.create({
     },
     matchStatusContainer: {
         justifyContent: 'center', //Centered vertically
-    //    alignItems: 'center', // Centered horizontally
-       textAlignVertical: 'center',
-       width: 80
+        //    alignItems: 'center', // Centered horizontally
+        textAlignVertical: 'center',
+        width: 80
     },
     matchStatus: {
         fontWeight: 'bold'
