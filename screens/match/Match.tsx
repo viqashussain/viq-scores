@@ -99,10 +99,8 @@ export default function Match({ route, navigation }) {
     }
 
     const onRefresh = useCallback(() => {
-        setIsLoaded(false);
         setRefreshing(true);
         fetchFixture(route.params.match.fixture.id).then(x => {
-            setIsLoaded(true);
             setRefreshing(false);
         });
     }, []);

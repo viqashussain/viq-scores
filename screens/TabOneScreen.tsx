@@ -60,10 +60,8 @@ export default function TabOneScreen(props: any) {
   ]);
 
   const onRefresh = React.useCallback(() => {
-    // setIsLoaded(false);
     setRefreshing(true);
     fetchFixturesForDate(moment(selectedDate)).then(x => {
-      // setIsLoaded(true);
       setRefreshing(false);
     });
   }, []);
