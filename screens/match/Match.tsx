@@ -17,15 +17,26 @@ import { Fixture, FixtureDetails } from "../../types/types";
 import { CUSTOM_COLORS } from "../../types/colors";
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { Spinner } from "../../components/Spinner";
 
 export default function Match({ route, navigation }) {
 
     const dispatch = useDispatch();
     const { fixtureDetails } = useSelector(state => state.fixturesReducer);
-    const fetchFixture = async (id: number) => dispatch(getFixtureDetails(id));
+    const fetchFixture = async (id: number | null) => dispatch(getFixtureDetails(id));
 
-    useEffect(() => { fetchFixture(route.params.match.fixture.id) }, []);
     useEffect(() => {
+        fetchFixture(route.params.match.fixture.id)
+
+        // return a function to execute at unmount
+        return () => {
+            // fixtureDetails = null;
+            setIsLoaded(false);
+            fetchFixture(null);
+        }
+    }, []);
+    useEffect(() => {
+        debugger;
         if (fixtureDetails) {
             initializeHomeGoalScorersOwnGoalsAndRedCards();
             setIsLoaded(true);
@@ -178,7 +189,7 @@ export default function Match({ route, navigation }) {
         <View style={styles.container}>
             {
                 !isLoaded || !fixtureDetails ? (
-                    <ActivityIndicator size={'large'} animating={true} color={Colors.red800} />
+                    <Spinner />
                 )
                     : (
 
