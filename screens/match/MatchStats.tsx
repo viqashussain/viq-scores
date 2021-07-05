@@ -83,7 +83,7 @@ export default function MatchStats(props: { fixture: Fixture }) {
 const styles = StyleSheet.create({
     container: {
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
     listItem: {
         display: 'flex',
@@ -94,12 +94,12 @@ const styles = StyleSheet.create({
     },
     homeProgressBar: {
         height: 10,
-        width: (Dimensions.get('window').width / 2),
+        width: (Dimensions.get('window').width / 2) - 20,
         transform: [{ rotate: "180deg" }],
     },
     awayProgressBar: {
         height: 10,
-        width: (Dimensions.get('window').width / 2),
+        width: (Dimensions.get('window').width / 2) - 20,
         // transform: [{ scaleX: 0.5 }]
     },
     statsTypeContainer: {
@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
         paddingTop: 5
     },
     awayValue: {
-        right: 0
+        right: 0,
+        textAlign: 'right'
     }
 });

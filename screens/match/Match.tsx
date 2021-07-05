@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { View, Text } from '../../components/Themed';
 import { StyleSheet, Image, SafeAreaView, ScrollView, useWindowDimensions, RefreshControl } from 'react-native';
-import { ActivityIndicator, Colors, Divider } from 'react-native-paper';
+import { ActivityIndicator, Card, Colors, Divider } from 'react-native-paper';
 import { getFixtureDetails, GET_FIXTURE_DETAILS } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { List } from 'react-native-paper';
@@ -150,7 +150,11 @@ export default function Match({ route, navigation }) {
                 </View>
             case 'third':
                 return <View key={'third'}>
-                    <MatchStats fixture={fixtureDetails} />
+                    <Card>
+                        <Card.Content>
+                            <MatchStats fixture={fixtureDetails} />
+                        </Card.Content>
+                    </Card>
                 </View>
             default:
                 return null;
@@ -173,7 +177,7 @@ export default function Match({ route, navigation }) {
                             flexDirection: 'row',
                             backgroundColor: CUSTOM_COLORS.aliceBlue
                         }}>
-                            <View style={{ width: 20, backgroundColor: 'transparent', left: -20}}>
+                            <View style={{ width: 20, backgroundColor: 'transparent', left: -20 }}>
                                 <Icon name={route.icon} size={20} color={CUSTOM_COLORS.safetyYellow} />
                             </View>
                         </View>

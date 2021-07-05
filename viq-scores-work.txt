@@ -17,3 +17,4 @@ viq-scores work
 - DONE - pressing league table button makes the background black
 - DONE - carousel colours look awful
 - DONE - tab icons not showing
+- need to add padding to within the tabs

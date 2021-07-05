@@ -34,6 +34,6 @@ const styles = StyleSheet.create({
     },
     innerContainer: {
         display: 'flex',
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
 });

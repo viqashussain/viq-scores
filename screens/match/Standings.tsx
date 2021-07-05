@@ -110,15 +110,15 @@ export default function Standings({ route, navigation }) {
                                                                                 </View>
                                                                                 <Text>{ls.team.name}</Text>
                                                                             </DataTable.Cell>
-                                                                            <DataTable.Cell numeric>{ls.points}</DataTable.Cell>
-                                                                            <DataTable.Cell numeric>{ls.goalsDiff}</DataTable.Cell>
-                                                                            <DataTable.Cell numeric>{ls.all.played}</DataTable.Cell>
-                                                                            <DataTable.Cell numeric>{ls.all.win}</DataTable.Cell>
-                                                                            <DataTable.Cell numeric>{ls.all.draw}</DataTable.Cell>
-                                                                            <DataTable.Cell numeric>{ls.all.lose}</DataTable.Cell>
-                                                                            <DataTable.Cell numeric>{ls.all.goals.for}</DataTable.Cell>
-                                                                            <DataTable.Cell numeric>{ls.all.goals.against}</DataTable.Cell>
-                                                                            <DataTable.Cell numeric>{ls.form}</DataTable.Cell>
+                                                                            <DataTable.Cell>{ls.points}</DataTable.Cell>
+                                                                            <DataTable.Cell>{ls.goalsDiff}</DataTable.Cell>
+                                                                            <DataTable.Cell>{ls.all.played}</DataTable.Cell>
+                                                                            <DataTable.Cell>{ls.all.win}</DataTable.Cell>
+                                                                            <DataTable.Cell>{ls.all.draw}</DataTable.Cell>
+                                                                            <DataTable.Cell>{ls.all.lose}</DataTable.Cell>
+                                                                            <DataTable.Cell>{ls.all.goals.for}</DataTable.Cell>
+                                                                            <DataTable.Cell>{ls.all.goals.against}</DataTable.Cell>
+                                                                            <DataTable.Cell>{ls.form}</DataTable.Cell>
                                                                         </DataTable.Row>
 
                                                                     )
