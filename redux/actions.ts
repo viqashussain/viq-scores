@@ -37,25 +37,53 @@ const rapidApiHeaders = {
   }
 }
 
-export const getLeagueStandings = (leagueId: number | null) => {
+const getLeagueSeasonYear = async (leagueId: number) => {
+  try {
+    const res = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/leagues?current=true&id=${leagueId}`, rapidApiHeaders);
+
+    // console.log(res.data.response[0].league)
+
+    if (res.data) {
+      return res.data.response[0].seasons[0].year;
+    } else {
+      console.log('Unable to fetch');
+    }
+
+    // dispatch({
+    //   type: GET_LEAGUE_STANDINGS,
+    //   payload: euroStandings.response[0].league
+    // });
+    // eslint-disable-next-line no-unreachable
+  } catch (error) {
+    // Add custom logic to handle errors
+  }
+};
+
+export const getLeagueStandings = (leagueId: number) => {
+  console.log(leagueId)
   try {
     return async (dispatch: any) => {
-      if (leagueId == null) {
-        dispatch({
-          type: GET_FIXTURE_DETAILS,
-          payload: null
-        });
-        return;
-      }
-      const res = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/standings?season=2021&league=${leagueId}`, rapidApiHeaders);
+      const year = await getLeagueSeasonYear(leagueId);
+      console.log({ year })
+      const res = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/standings?season=${year}&league=${leagueId}`, rapidApiHeaders);
 
       // console.log(res.data.response[0].league)
 
       if (res.data) {
-        dispatch({
-          type: GET_LEAGUE_STANDINGS,
-          payload: res.data.response[0].league,
-        });
+        if (res.data.response.length)
+        {
+          dispatch({
+            type: GET_LEAGUE_STANDINGS,
+            payload: res.data.response[0].league,
+          });
+        }
+        else
+        {
+          dispatch({
+            type: GET_LEAGUE_STANDINGS,
+            payload: 'unavailable'
+          });
+        }
       } else {
         console.log('Unable to fetch');
       }

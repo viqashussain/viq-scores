@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { View, Text } from '../../components/Themed';
 import { StyleSheet, Image, SafeAreaView, ScrollView, useWindowDimensions, RefreshControl } from 'react-native';
 import { ActivityIndicator, Colors, Divider } from 'react-native-paper';
-import { getFixtureDetails } from "../../redux/actions";
+import { getFixtureDetails, GET_FIXTURE_DETAILS } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { List } from 'react-native-paper';
 import Event from './Event';
@@ -32,7 +32,11 @@ export default function Match({ route, navigation }) {
         return () => {
             // fixtureDetails = null;
             setIsLoaded(false);
-            fetchFixture(null);
+            // fetchFixture(null);
+            dispatch({
+                type: GET_FIXTURE_DETAILS,
+                payload: null
+            });
         }
     }, []);
     useEffect(() => {
@@ -117,7 +121,7 @@ export default function Match({ route, navigation }) {
     const renderScene = ({ route }) => {
         switch (route.key) {
             case 'first':
-                return <View key={'first'} style={{ flex: 1 }}>
+                return <View key={'first'} style={{ flex: 1, paddingLeft: 10, paddingRight: 10 }}>
                     {fixtureDetails.events.map((x: any, i: number) => {
                         return (
                             <Event key={i} event={x} homeTeamId={fixtureDetails.teams.home.id} awayTeamId={fixtureDetails.teams.away.id} />
@@ -169,7 +173,9 @@ export default function Match({ route, navigation }) {
                             flexDirection: 'row',
                             backgroundColor: CUSTOM_COLORS.aliceBlue
                         }}>
-                            <Icon name={route.icon} size={20} color={CUSTOM_COLORS.safetyYellow} />
+                            <View style={{ width: 20, backgroundColor: 'transparent', left: -20}}>
+                                <Icon name={route.icon} size={20} color={CUSTOM_COLORS.safetyYellow} />
+                            </View>
                         </View>
                         <Text style={{ color: 'black', fontWeight: 'bold', margin: 8 }}>
                             {route.title}

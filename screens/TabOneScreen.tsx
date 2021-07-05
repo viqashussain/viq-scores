@@ -155,11 +155,11 @@ export default function TabOneScreen(props: any) {
 
         <LinearGradient
           // Background Linear Gradient
-          colors={[CUSTOM_COLORS.lightSafetyYellow, 'transparent']}
+          colors={[CUSTOM_COLORS.safetyYellow, 'transparent']}
           style={styles.background}
         />
 
-        <Button compact onPress={() => goToTodayInCarousel()} style={{ marginLeft: 10 }} labelStyle={{ fontSize: 10, color: 'black' }} mode={'outlined'}>Today</Button>
+        <Button compact onPress={() => goToTodayInCarousel()} style={{ marginLeft: 10 }} labelStyle={{ fontSize: 10, fontWeight: 'bold', color: 'white' }} mode={'outlined'}>Today</Button>
 
         <Carousel
           style={styles.carousel}
@@ -271,13 +271,12 @@ export default function TabOneScreen(props: any) {
                         </List.Section>
 
                         <View>
-                          <TouchableHighlight style={{ display: 'flex' }} onPress={() => goToStandings(x[0].league.id)}>
+                          <TouchableOpacity style={{ display: 'flex' }} onPress={() => goToStandings(x[0].league.id)}>
                             {/* <FontAwesomeIcon style={{ height: 20 }} icon={faTable} /> */}
-                            <Button>
-                              <Icon name="table" size={50} color={CUSTOM_COLORS.safetyYellow} />
-
+                            <Button style={{ paddingTop: 10 }}>
+                              <Icon name="table" size={25} color={CUSTOM_COLORS.safetyYellow} />
                             </Button>
-                          </TouchableHighlight>
+                          </TouchableOpacity>
                         </View>
                       </View>
                     })}
@@ -385,7 +384,7 @@ const styles = StyleSheet.create({
     // width: '80%',
     display: 'flex',
     paddingLeft: 20,
-    paddingRight: 20,
+    // paddingRight: 20,
     flex: 1,
   }
 });
