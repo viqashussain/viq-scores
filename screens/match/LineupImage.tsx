@@ -106,8 +106,6 @@ function getTeamEventsArray(fixtureDetails: Fixture, getHomeTeam: boolean)
         })
     });
 
-    debugger;
-
     // console.log('abc: ' + JSON.stringify(arrayToReturn.find(x => x.player == 'Robin Gosens')))
 
     return arrayToReturn;

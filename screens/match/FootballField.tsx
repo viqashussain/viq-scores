@@ -8,7 +8,6 @@ export default class FootballField extends Component {
       home: props.home,
       away: props.away,
     };
-    debugger;
     console.log('home_team_events: ' + JSON.stringify(props.home.home_team_events))
   }
 
