@@ -13,14 +13,24 @@ export default function Standings({ route, navigation }) {
 
     const dispatch = useDispatch();
     const { leagueStandings }: { leagueStandings: League } = useSelector(state => state.fixturesReducer);
-    const fetchLeagueStandings = async (id: number) => dispatch(getLeagueStandings(id));
+    const fetchLeagueStandings = async (id: number | null) => dispatch(getLeagueStandings(id));
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
-    useEffect(() => { fetchLeagueStandings(route.params.id) }, []);
     useEffect(() => {
-        if (leagueStandings) {
+        fetchLeagueStandings(route.params.leagueId)
+
+        return () => {
+            setIsLoaded(false);
+            fetchLeagueStandings(null);
+        }
+    }, []);
+
+    useEffect(() => {
+
+        
+        if (leagueStandings.standings) {
             setIsLoaded(true);
             setRefreshing(false);
         }
@@ -46,8 +56,8 @@ export default function Standings({ route, navigation }) {
                             <SafeAreaView>
                                 <ScrollView horizontal >
                                     <ScrollView style={{
-                                        height:  height - 150
-                                    }}> 
+                                        height: height - 150
+                                    }}>
                                         <View style={{ flex: 1 }}>
                                             <DataTable style={{ width: 750 }}>
                                                 <DataTable.Header>
@@ -72,8 +82,8 @@ export default function Standings({ route, navigation }) {
                                                                     <DataTable.Row key={i}>
                                                                         <DataTable.Cell>{ls.rank}</DataTable.Cell>
                                                                         <DataTable.Cell style={{ flex: 3 }}>
-                                                                        <View style={{paddingRight: 10}}>
-                                                                            <Image style={styles.teamLogo} source={{ uri: ls.team.logo }} />
+                                                                            <View style={{ paddingRight: 10 }}>
+                                                                                <Image style={styles.teamLogo} source={{ uri: ls.team.logo }} />
                                                                             </View>
                                                                             <Text>{ls.team.name}</Text>
                                                                         </DataTable.Cell>

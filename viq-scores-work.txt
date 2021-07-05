@@ -7,7 +7,8 @@ viq-scores work
 - DONE - display scorers under main team scores.
 - DONE - multiple goals not showing correctly in team lineup image
 - DONE - show pens won
-- previous match details shown when you go into a match
+- DONE - previous match details shown when you go into a match
 - DONE - loading spinner not showing on tab one screen
 - test refreshing of matches and fixtures
 - add a today button in the carousel so it scrolls to today
+- need to use current season for when getting league standings

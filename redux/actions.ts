@@ -37,15 +37,24 @@ const rapidApiHeaders = {
   }
 }
 
-export const getLeagueStandings = (leagueId: number) => {
+export const getLeagueStandings = (leagueId: number | null) => {
   try {
     return async (dispatch: any) => {
-      // const res = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${moment().format('YYYY-MM-DD')}`, rapidApiHeaders);
+      if (leagueId == null) {
+        dispatch({
+          type: GET_FIXTURE_DETAILS,
+          payload: null
+        });
+        return;
+      }
+      const res = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/standings?season=2021&league=${leagueId}`, rapidApiHeaders);
+
+      // console.log(res.data.response[0].league)
 
       if (res.data) {
         dispatch({
-          type: GET_TODAYS_FIXTURES,
-          payload: groupFixturesListByLeagueId(res.data.response),
+          type: GET_LEAGUE_STANDINGS,
+          payload: res.data.response[0].league,
         });
       } else {
         console.log('Unable to fetch');

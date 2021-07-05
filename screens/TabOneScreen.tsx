@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { StyleSheet, Image, SafeAreaView, ScrollView, RefreshControl, Dimensions, TouchableHighlight } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { StyleSheet, Image, SafeAreaView, ScrollView, RefreshControl, Dimensions, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Text, View } from '../components/Themed';
@@ -33,8 +33,8 @@ export default function TabOneScreen(props: any) {
   const dispatch = useDispatch();
   const fetchTodaysFixtures = async () => dispatch(getTodaysFixtures());
   const fetchFixturesForDate = async (date: Moment) => dispatch(getFixturesForDate(date));
+  const carouselRef = useRef(null);
 
-  let carousel: any;
 
   const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'));
   const [isLoaded, setIsLoaded] = useState(false);
@@ -73,8 +73,7 @@ export default function TabOneScreen(props: any) {
 
   useEffect(() => {
     setFixtures(todaysFixtures);
-    if (todaysFixtures.length)
-    {
+    if (todaysFixtures.length) {
       setIsLoaded(true);
     }
   }, [todaysFixtures]);
@@ -126,18 +125,29 @@ export default function TabOneScreen(props: any) {
     setIsLoaded(true);
   }
 
-  const goToStandings = (match: any) => {
-    props.navigation.navigate('Standings', { leagueId: props.match });
+  const datePressed = async (index: number) => {
+    (carouselRef.current as any).snapToItem(index);
+    await dateSelectedNew(index);
+  }
+
+  const goToTodayInCarousel = async () => {
+    (carouselRef.current as any).snapToItem(7);
+    await dateSelectedNew(7);
+  }
+
+  const goToStandings = (leagueId: number) => {
+    props.navigation.navigate('Standings', { leagueId });
   }
 
   const dateCalendarItem = ({ item, index }) => {
     const isSelected = moment(selectedDate).format('L') == moment(item).format('L');
     return (
-      <View style={isSelected ? styles.dateCalendarItemSelected : styles.dateCalendarItem}>
-        <Text style={styles.dateCalendarItemText}>{item.format('ddd')}</Text>
-        <Text style={styles.dateCalendarItemText}>{item.format('Do MMM')}</Text>
-      </View>
-
+      <TouchableOpacity onPress={x => datePressed(index)}>
+        <View style={isSelected ? styles.dateCalendarItemSelected : styles.dateCalendarItem}>
+          <Text style={styles.dateCalendarItemText}>{item.format('ddd')}</Text>
+          <Text style={styles.dateCalendarItemText}>{item.format('Do MMM')}</Text>
+        </View>
+      </TouchableOpacity>
     )
   }
 
@@ -151,21 +161,24 @@ export default function TabOneScreen(props: any) {
           style={styles.background}
         />
 
-        {/* <Carousel
+        <Button compact onPress={() => goToTodayInCarousel()} style={{ marginLeft: 10 }} labelStyle={{ fontSize: 10, color: 'black' }} mode={'outlined'}>Today</Button>
+
+        <Carousel
           style={styles.carousel}
           layout={"default"}
-          ref={ref => carousel = ref}
+          ref={carouselRef}
           data={carouselItems}
-          sliderWidth={Dimensions.get('window').width}
+          sliderWidth={Dimensions.get('window').width - 150}
           itemWidth={75}
           firstItem={7}
           enableSnap={true}
           renderItem={dateCalendarItem}
           inactiveSlideScale={0.75}
+          // layoutCardOffset={75}
           inactiveSlideOpacity={0.75}
           activeSlideAlignment={'center'}
           enableMomentum={true}
-          onSnapToItem={index => dateSelectedNew(index)} /> */}
+          onSnapToItem={index => dateSelectedNew(index)} />
       </View>
       {
         !isLoaded ? (
@@ -305,6 +318,7 @@ const styles = StyleSheet.create({
     backgroundColor: CUSTOM_COLORS.lightSafetyYellow,
     textAlign: 'center',
     display: 'flex',
+    flexDirection: 'row'
   },
   background: {
     position: 'absolute',
@@ -339,7 +353,7 @@ const styles = StyleSheet.create({
     // flex: 'inherit' 
   },
   carousel: {
-    height: 300,
+    height: 300
   },
   lgBackground: {
     position: 'absolute',
