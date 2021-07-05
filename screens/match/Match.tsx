@@ -36,7 +36,6 @@ export default function Match({ route, navigation }) {
         }
     }, []);
     useEffect(() => {
-        debugger;
         if (fixtureDetails) {
             initializeHomeGoalScorersOwnGoalsAndRedCards();
             setIsLoaded(true);
@@ -217,9 +216,9 @@ export default function Match({ route, navigation }) {
                                         colors={[CUSTOM_COLORS.safetyYellow, '#FFFFFF']}
                                         style={styles.linearBackground}
                                     />
-                                    <Text style={styles.textCenter}>{convertUtcDateToLocal(fixtureDetails.fixture.date)}</Text>
-                                    <Text style={styles.textCenter}>{fixtureDetails.fixture.venue.name}</Text>
-                                    <Text style={styles.textCenter}>{fixtureDetails.league.name} ({fixtureDetails.league.round})</Text>
+                                    <Text style={{ textAlign: 'center', zIndex: 999 }}>{convertUtcDateToLocal(fixtureDetails.fixture.date)}</Text>
+                                    <Text style={{ textAlign: 'center', zIndex: 999 }}>{fixtureDetails.fixture.venue.name}</Text>
+                                    <Text style={{ textAlign: 'center', zIndex: 999 }}>{fixtureDetails.league.name} ({fixtureDetails.league.round})</Text>
                                 </View>
                                 <Divider />
 
