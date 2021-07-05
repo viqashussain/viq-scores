@@ -71,7 +71,13 @@ export default function TabOneScreen(props: any) {
   // get fixtures for today on load
   useEffect(() => { fetchTodaysFixtures() }, []);
 
-  useEffect(() => { setFixtures(todaysFixtures); setIsLoaded(true) }, [todaysFixtures]);
+  useEffect(() => {
+    setFixtures(todaysFixtures);
+    if (todaysFixtures.length)
+    {
+      setIsLoaded(true);
+    }
+  }, [todaysFixtures]);
 
   useEffect(() => { setFixtures(oneDayAgoFixtures) }, [oneDayAgoFixtures]);
   useEffect(() => { setFixtures(twoDaysAgoFixtures) }, [twoDaysAgoFixtures]);
