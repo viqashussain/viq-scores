@@ -8,7 +8,11 @@ export default class FootballField extends Component {
       home: props.home,
       away: props.away,
     };
+    debugger;
+    console.log('home_team_events: ' + JSON.stringify(props.home.home_team_events))
   }
+
+
 
   render() {
     return (
@@ -59,10 +63,11 @@ export default class FootballField extends Component {
                         style={{
                           flexDirection: 'row',
                         }}>
-                        {this.state.home.home_team_events.map(
-                          (el, z) =>
-                            d.name == el.player &&
-                            el.type_of_event == 'yellow-card' && (
+                        {this.state.home.home_team_events
+                          .filter(el => el.id == d.id &&
+                            el.type_of_event == 'yellow-card')
+                          .map(
+                            (el, z) =>
                               <Image
                                 key={'hy' + z}
                                 source={require('./images/yellow-card.png')}
@@ -70,15 +75,15 @@ export default class FootballField extends Component {
                                   width: 12,
                                   height: 15,
                                   position: 'absolute',
-                                  left: -12,
+                                  left: -12 * (z == 0 ? 1 : z * 5),
                                 }}
                               />
-                            )
-                        )}
-                        {this.state.home.home_team_events.map(
-                          (el, z) =>
-                            d.name == el.player &&
-                            el.type_of_event == 'red-card' && (
+                          )}
+                        {this.state.home.home_team_events
+                          .filter(el => el.id == d.id &&
+                            el.type_of_event == 'red-card')
+                          .map(
+                            (el, z) =>
                               <Image
                                 key={'hr' + z}
                                 source={require('./images/red-card.png')}
@@ -89,32 +94,50 @@ export default class FootballField extends Component {
                                   left: -12,
                                 }}
                               />
-                            )
-                        )}
-                        {this.state.home.home_team_events.map(
-                          (el, z) =>
-                            d.name == el.player &&
-                            el.type_of_event == 'goal' && (
+                          )}
+                        {
+                          this.state.home.home_team_events
+                            .filter(el => el.id == d.id &&
+                              el.type_of_event == 'goal')
+                            .map(
+                              (el, z) =>
+                                <Image
+                                  key={'hy' + z}
+                                  source={require('./images/goal4.png')}
+                                  style={{
+                                    width: 15,
+                                    height: 15,
+                                    position: 'absolute',
+                                    left: 3 * (z == 0 ? 1 : z * 5),
+                                    top: -17
+                                  }}
+                                />
+                            )}
+                        {this.state.home.home_team_events
+                          .filter(el => el.id == d.id &&
+                            el.type_of_event == 'own-goal')
+                          .map(
+                            (el, z) =>
                               <Image
                                 key={'hy' + z}
-                                source={require('./images/goal4.png')}
-                                style={{ 
+                                source={require('./images/own-goal.png')}
+                                style={{
                                   width: 15,
                                   height: 15,
                                   position: 'absolute',
-                                  left: 7,
-                                  top: -15
-                                }} 
+                                  left: 3 * (z == 0 ? 1 : z * 5),
+                                  top: -17
+                                }}
                               />
-                            )
-                        )}
+                          )}
                         <View style={styles.playHome}>
                           <Text style={styles.text}>{d.number}</Text>
                         </View>
-                        {this.state.home.home_team_events.map(
-                          (el, z) =>
-                            d.name == el.player &&
-                            el.type_of_event == 'substitution-in' && (
+                        {this.state.home.home_team_events
+                          .filter(el => el.id == d.id &&
+                            el.type_of_event == 'substitution-in')
+                          .map(
+                            (el, z) =>
                               <Image
                                 key={'hs' + z}
                                 source={require('./images/substitution-in.png')}
@@ -125,8 +148,7 @@ export default class FootballField extends Component {
                                   right: -14,
                                 }}
                               />
-                            )
-                        )}
+                          )}
                       </View>
                       <Text style={styles.text}>{d.name}</Text>
                     </View>
@@ -150,10 +172,11 @@ export default class FootballField extends Component {
                         style={{
                           flexDirection: 'row',
                         }}>
-                        {this.state.away.away_team_events.map(
-                          (el, z) =>
-                            d.name == el.player &&
-                            el.type_of_event == 'yellow-card' && (
+                        {this.state.away.away_team_events
+                          .filter(el => el.id == d.id &&
+                            el.type_of_event == 'yellow-card')
+                          .map(
+                            (el, z) =>
                               <Image
                                 key={'ay' + z}
                                 source={require('./images/yellow-card.png')}
@@ -161,15 +184,15 @@ export default class FootballField extends Component {
                                   width: 12,
                                   height: 15,
                                   position: 'absolute',
-                                  left: -12,
+                                  left: -12 * (z == 0 ? 1 : z * 5),
                                 }}
                               />
-                            )
-                        )}
-                        {this.state.away.away_team_events.map(
-                          (el, z) =>
-                            d.name == el.player &&
-                            el.type_of_event == 'red-card' && (
+                          )}
+                        {this.state.away.away_team_events
+                          .filter(el => el.id == d.id &&
+                            el.type_of_event == 'red-card')
+                          .map(
+                            (el, z) =>
                               <Image
                                 key={'ar' + z}
                                 source={require('./images/red-card.png')}
@@ -180,15 +203,50 @@ export default class FootballField extends Component {
                                   left: -12,
                                 }}
                               />
-                            )
-                        )}
+                          )}
+                        {
+                          this.state.away.away_team_events
+                            .filter(el => el.id == d.id &&
+                              el.type_of_event == 'goal')
+                            .map(
+                              (el, z) =>
+                                <Image
+                                  key={'hy' + z}
+                                  source={require('./images/goal4.png')}
+                                  style={{
+                                    width: 15,
+                                    height: 15,
+                                    position: 'absolute',
+                                    left: 3 * (z == 0 ? 1 : z * 5),
+                                    top: 22
+                                  }}
+                                />
+                            )}
+                        {this.state.away.away_team_events
+                          .filter(el => el.id == d.id &&
+                            el.type_of_event == 'own-goal')
+                          .map(
+                            (el, z) =>
+                              <Image
+                                key={'hy' + z}
+                                source={require('./images/own-goal.png')}
+                                style={{
+                                  width: 15,
+                                  height: 15,
+                                  position: 'absolute',
+                                  left: 3 * (z == 0 ? 1 : z * 5),
+                                  top: 22
+                                }}
+                              />
+                          )}
                         <View style={styles.playAway}>
                           <Text style={styles.text}>{d.number}</Text>
                         </View>
-                        {this.state.away.away_team_events.map(
-                          (el, z) =>
-                            d.name == el.player &&
-                            el.type_of_event == 'substitution-in' && (
+                        {this.state.away.away_team_events
+                          .filter(el => el.id == d.id &&
+                            el.type_of_event == 'substitution-in')
+                          .map(
+                            (el, z) =>
                               <Image
                                 key={'as' + z}
                                 source={require('./images/substitution-in.png')}
@@ -199,8 +257,7 @@ export default class FootballField extends Component {
                                   right: -14,
                                 }}
                               />
-                            )
-                        )}
+                          )}
                       </View>
                     </View>
                   ))}
@@ -242,6 +299,7 @@ export default class FootballField extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%'
   },
   rowHome: {
     flex: 1,
@@ -257,8 +315,8 @@ const styles = StyleSheet.create({
   },
   playHome: {
     justifyContent: 'center',
-    width: 30,
-    height: 30,
+    width: 20,
+    height: 20,
     borderRadius: 15,
     borderWidth: 2,
     borderColor: 'rgb(244, 67, 54)',
@@ -266,8 +324,8 @@ const styles = StyleSheet.create({
   },
   playAway: {
     justifyContent: 'center',
-    width: 30,
-    height: 30,
+    width: 20,
+    height: 20,
     borderRadius: 15,
     borderWidth: 2,
     borderColor: 'rgb(3, 169, 244)',
@@ -280,6 +338,6 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.75)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 1,
-    fontSize: 15,
+    fontSize: 12,
   },
 });

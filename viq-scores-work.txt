@@ -1,0 +1,9 @@
+viq-scores work
+
+- DONE - own goals not showing correctly.
+- DONE - assist is showing as a sub?
+- DONE - events are not showing in team lineup image
+- DONE - own goal not showing in team lineup image
+- DONE - display scorers under main team scores.
+- DONE - multiple goals not showing correctly in team lineup image
+- DONE - show pens won

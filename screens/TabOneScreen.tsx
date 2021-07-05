@@ -32,7 +32,7 @@ export default function TabOneScreen(props: any) {
     oneDayFutureFixtures, twoDaysFutureFixtures, threeDaysFutureFixtures, fourDaysFutureFixtures, fiveDaysFutureFixtures, sixDaysFutureFixtures, sevenDaysFutureFixtures } = useSelector(state => state.fixturesReducer);
   const dispatch = useDispatch();
   const fetchTodaysFixtures = async () => dispatch(getTodaysFixtures());
-  const fetchFixturesForDate = async (date: Date) => dispatch(getFixturesForDate(date));
+  const fetchFixturesForDate = async (date: Moment) => dispatch(getFixturesForDate(date));
 
   let carousel: any;
 
@@ -42,28 +42,28 @@ export default function TabOneScreen(props: any) {
 
   const [refreshing, setRefreshing] = useState(false);
   const [carouselItems] = useState([
-    moment().add(-7, 'd'),
-    moment().add(-6, 'd'),
-    moment().add(-5, 'd'),
-    moment().add(-4, 'd'),
-    moment().add(-3, 'd'),
-    moment().add(-2, 'd'),
-    moment().add(-1, 'd'),
-    moment(),
-    moment().add(1, 'd'),
-    moment().add(2, 'd'),
-    moment().add(3, 'd'),
-    moment().add(4, 'd'),
-    moment().add(5, 'd'),
-    moment().add(6, 'd'),
-    moment().add(7, 'd'),
+    moment().add(-7, 'd').startOf('day'),
+    moment().add(-6, 'd').startOf('day'),
+    moment().add(-5, 'd').startOf('day'),
+    moment().add(-4, 'd').startOf('day'),
+    moment().add(-3, 'd').startOf('day'),
+    moment().add(-2, 'd').startOf('day'),
+    moment().add(-1, 'd').startOf('day'),
+    moment().startOf('day'),
+    moment().add(1, 'd').startOf('day'),
+    moment().add(2, 'd').startOf('day'),
+    moment().add(3, 'd').startOf('day'),
+    moment().add(4, 'd').startOf('day'),
+    moment().add(5, 'd').startOf('day'),
+    moment().add(6, 'd').startOf('day'),
+    moment().add(7, 'd').startOf('day'),
   ]);
 
   const onRefresh = React.useCallback(() => {
-    setIsLoaded(false);
+    // setIsLoaded(false);
     setRefreshing(true);
-    fetchFixturesForDate(moment(selectedDate).toDate()).then(x => {
-      setIsLoaded(true);
+    fetchFixturesForDate(moment(selectedDate)).then(x => {
+      // setIsLoaded(true);
       setRefreshing(false);
     });
   }, []);
@@ -116,17 +116,15 @@ export default function TabOneScreen(props: any) {
   const dateSelectedNew = async (index: number) => {
     setIsLoaded(false);
     setSelectedDate(carouselItems[index].toString());
-    await fetchFixturesForDate(new Date(selectedDate));
+    await fetchFixturesForDate(moment(carouselItems[index].toString()));
     setIsLoaded(true);
   }
 
   const goToStandings = (match: any) => {
-    console.log('e')
     props.navigation.navigate('Standings', { leagueId: props.match });
   }
 
   const dateCalendarItem = ({ item, index }) => {
-    // console.log(carouselItems[index])
     const isSelected = moment(selectedDate).format('L') == moment(item).format('L');
     return (
       <View style={isSelected ? styles.dateCalendarItemSelected : styles.dateCalendarItem}>
@@ -147,7 +145,7 @@ export default function TabOneScreen(props: any) {
           style={styles.background}
         />
 
-        <Carousel
+        {/* <Carousel
           style={styles.carousel}
           layout={"default"}
           ref={ref => carousel = ref}
@@ -161,7 +159,7 @@ export default function TabOneScreen(props: any) {
           inactiveSlideOpacity={0.75}
           activeSlideAlignment={'center'}
           enableMomentum={true}
-          onSnapToItem={index => dateSelectedNew(index)} />
+          onSnapToItem={index => dateSelectedNew(index)} /> */}
       </View>
       {
         !isLoaded ? (
@@ -207,7 +205,7 @@ export default function TabOneScreen(props: any) {
 
 
                   <View style={styles.dateContainer}>
-                    <Text style={styles.title}>{moment().format('LL')} Fixtures</Text>
+                    <Text style={styles.title}>{moment(selectedDate).format('LL')} Fixtures</Text>
                   </View>
 
                   <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
@@ -227,18 +225,18 @@ export default function TabOneScreen(props: any) {
                             {x.map((match: any, j: number) => {
                               if (match.fixture.status.short === 'NS') {
                                 return (
-                                  <NotStartedFixture navigation={props.navigation} key={j} match={match} />
+                                  <NotStartedFixture key={match.fixture.id} navigation={props.navigation} key={j} match={match} />
                                 )
                               }
                               else if (match.fixture.status.short === '1H' || match.fixture.status.short === '2H' || match.fixture.status.short === 'ET' || match.fixture.status.short === 'P' || match.fixture.status.short === 'BT') {
                                 return (
-                                  <LiveFixture navigation={props.navigation} key={j} match={match} />
+                                  <LiveFixture key={match.fixture.id} navigation={props.navigation} key={j} match={match} />
                                 )
                               }
                               else if (match.fixture.status.short === 'HT' || match.fixture.status.short === 'FT'
                                 || match.fixture.status.short === 'AET' || match.fixture.status.short === 'PEN') {
                                 return (
-                                  <FinishedFixture navigation={props.navigation} key={j} match={match} />
+                                  <FinishedFixture key={match.fixture.id} navigation={props.navigation} key={j} match={match} />
                                 )
                               }
                               else if (match.fixture.status.short === 'TBD' || match.fixture.status.short === 'SUSP'
@@ -246,7 +244,7 @@ export default function TabOneScreen(props: any) {
                                 || match.fixture.status.short === 'CANC' || match.fixture.status.short === 'ABD'
                                 || match.fixture.status.short === 'AWD' || match.fixture.status.short === 'WO') {
                                 return (
-                                  <MiscFixture navigation={props.navigation} key={j} match={match} />
+                                  <MiscFixture key={match.fixture.id} navigation={props.navigation} key={j} match={match} />
                                 )
                               }
                             })}
@@ -298,7 +296,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 20,
     paddingBottom: 20,
-    backgroundColor: CUSTOM_COLORS.safetyYellow,
+    backgroundColor: CUSTOM_COLORS.lightSafetyYellow,
     textAlign: 'center',
     display: 'flex',
   },

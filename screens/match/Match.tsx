@@ -26,9 +26,8 @@ export default function Match({ route, navigation }) {
 
     useEffect(() => { fetchFixture(route.params.match.fixture.id) }, []);
     useEffect(() => {
-        console.log('in useEffect')
-        // setFixture(fixtureDetails); 
         if (fixtureDetails) {
+            initializeHomeGoalScorersOwnGoalsAndRedCards();
             setIsLoaded(true);
             setRefreshing(false);
         }
@@ -41,6 +40,53 @@ export default function Match({ route, navigation }) {
     // const [fixture, setFixture] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
+    const [homeGoalScorersOwnGoalsAndRedCards, setHomeGoalScorersOwnGoalsAndRedCards] = useState('');
+    const [awayGoalScorersOwnGoalsAndRedCards, setAwayGoalScorersOwnGoalsAndRedCards] = useState('');
+
+    // away goals are with the other teams' events
+    const initializeHomeGoalScorersOwnGoalsAndRedCards = () => {
+        if (!(fixtureDetails as Fixture).events) {
+            return '';
+        }
+        const homeTeamId = (fixtureDetails as Fixture).teams.home.id;
+        const homeScorersAndRedCards = (fixtureDetails as Fixture).events
+            .filter(x => x.team.id == homeTeamId)
+            .filter(x => x.type == 'Goal' || x.detail == 'Red Card')
+            .sort(function (a, b) {
+                return a.time.elapsed - b.time.elapsed;
+            });
+
+        const homeString = homeScorersAndRedCards.map(x => {
+            if (x.detail == 'Own Goal') {
+                return `${x.player.name} (${x.time.elapsed}' OG)`;
+            }
+            else if (x.detail == 'Red Card') {
+                return `${x.player.name} (${x.time.elapsed}' Red Card)`;
+            }
+            return `${x.player.name} (${x.time.elapsed}')`;
+        }).join(', ');;
+
+        setHomeGoalScorersOwnGoalsAndRedCards(homeString);
+
+        const awayScorersAndRedCards = (fixtureDetails as Fixture).events
+            .filter(x => x.team.id != homeTeamId)
+            .filter(x => x.type == 'Goal' || x.detail == 'Red Card')
+            .sort(function (a, b) {
+                return a.time.elapsed - b.time.elapsed;
+            });
+
+        const awayString = awayScorersAndRedCards.map(x => {
+            if (x.detail == 'Own Goal') {
+                return `${x.player.name} (${x.time.elapsed}' OG)`;
+            }
+            else if (x.detail == 'Red Card') {
+                return `${x.player.name} (${x.time.elapsed}' Red Card)`;
+            }
+            return `${x.player.name} (${x.time.elapsed}')`;
+        }).join(', ');
+
+        setAwayGoalScorersOwnGoalsAndRedCards(awayString);
+    }
 
     const onRefresh = useCallback(() => {
         setIsLoaded(false);
@@ -63,8 +109,7 @@ export default function Match({ route, navigation }) {
     const renderScene = ({ route }) => {
         switch (route.key) {
             case 'first':
-                return <View style={{ flex: 1 }}>
-                    <Text>Hello</Text>
+                return <View key={'first'} style={{ flex: 1 }}>
                     {fixtureDetails.events.map((x: any, i: number) => {
                         return (
                             <Event key={i} event={x} homeTeamId={fixtureDetails.teams.home.id} awayTeamId={fixtureDetails.teams.away.id} />
@@ -72,9 +117,9 @@ export default function Match({ route, navigation }) {
                     })}
                 </View>
             case 'second':
-                return <View style={{ flex: 1 }}>
+                return <View key={'second'} style={{ flex: 1 }}>
                     <LineupImage fixture={fixtureDetails} />
-                    <Text>Starting XI</Text>
+                    <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Starting XI</Text>
                     <List.Item
                         title=""
                         left={x => <Lineup fixture={fixtureDetails} teamId={fixtureDetails.teams.home.id} />}
@@ -82,7 +127,7 @@ export default function Match({ route, navigation }) {
 
                     </List.Item>
 
-                    <Text>Bench</Text>
+                    <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Bench</Text>
 
                     <List.Item
                         title=""
@@ -92,7 +137,7 @@ export default function Match({ route, navigation }) {
                     </List.Item>
                 </View>
             case 'third':
-                return <View>
+                return <View key={'third'}>
                     <MatchStats fixture={fixtureDetails} />
                 </View>
             default:
@@ -148,11 +193,19 @@ export default function Match({ route, navigation }) {
                                         {fixtureDetails.fixture.status.short === '1H'
                                             || fixtureDetails.fixture.status.short === '2H'
                                             || fixtureDetails.fixture.status.short === 'ET' ?
-                                            `- ${fixtureDetails.fixture.status.elapsed}'` : ''}
+                                            `- ${fixtureDetails.fixture.status.elapsed}'` : ` - ${fixtureDetails.fixture.status.short}`}
                                     </Text>
+                                </View>
+                                <View>
+
                                 </View>
                                 <Divider />
                                 <View style={styles.matchDetailsContainer}>
+                                    <LinearGradient
+                                        // Background Linear Gradient
+                                        colors={[CUSTOM_COLORS.safetyYellow, '#FFFFFF']}
+                                        style={styles.linearBackground}
+                                    />
                                     <Text style={styles.textCenter}>{convertUtcDateToLocal(fixtureDetails.fixture.date)}</Text>
                                     <Text style={styles.textCenter}>{fixtureDetails.fixture.venue.name}</Text>
                                     <Text style={styles.textCenter}>{fixtureDetails.league.name} ({fixtureDetails.league.round})</Text>
@@ -163,18 +216,29 @@ export default function Match({ route, navigation }) {
 
                                     <LinearGradient
                                         // Background Linear Gradient
-                                        colors={[CUSTOM_COLORS.lightSafetyYellow, 'transparent']}
+                                        colors={['#FFFFFF', CUSTOM_COLORS.safetyYellow]}
                                         style={styles.matchStatusContainerBackground}
                                     />
 
                                     <List.Item titleStyle={styles.teamName}
+                                        description={homeGoalScorersOwnGoalsAndRedCards}
                                         title={`${fixtureDetails.teams.home.name}`}
                                         left={props => <Image style={styles.logoImage} source={{ uri: fixtureDetails.teams.home.logo }} />}
                                         right={props => <Text style={styles.score}>{`${fixtureDetails.goals.home ?? '-'}`}</Text>} />
                                     <List.Item titleStyle={styles.teamName}
+                                        description={awayGoalScorersOwnGoalsAndRedCards}
                                         title={`${fixtureDetails.teams.away.name}`}
                                         left={props => <Image style={styles.logoImage} source={{ uri: fixtureDetails.teams.away.logo }} />}
                                         right={props => <Text style={styles.score}>{`${fixtureDetails.goals.away ?? '-'}`}</Text>} />
+
+                                    {
+                                        fixtureDetails.fixture.status.short == 'PEN' ?
+                                            <View style={{ backgroundColor: CUSTOM_COLORS.safetyYellow }}>
+                                                <Text style={{ textAlign: 'center', fontWeight: 'bold', paddingTop: 3, paddingBottom: 3 }}>{getPenStatus(fixtureDetails)}</Text>
+                                            </View>
+                                            :
+                                            <View></View>
+                                    }
                                 </View>
                                 {
                                     fixtureDetails.events?.length ?
@@ -189,7 +253,9 @@ export default function Match({ route, navigation }) {
                                             />
                                         ) :
                                         (
-                                            <View></View>
+                                            <View>
+                                                <Text style={{ fontSize: 20, padding: 20 }}>Match details will be displayed once they are released/the match starts.</Text>
+                                            </View>
                                         )}
 
                             </ScrollView>
@@ -226,7 +292,8 @@ const styles = StyleSheet.create({
     score: {
         fontSize: 20,
         fontWeight: 'bold',
-        textAlign: 'center'
+        textAlign: 'center',
+        paddingRight: 10
     },
     logoImage: {
         height: 40,
@@ -249,7 +316,7 @@ const styles = StyleSheet.create({
     matchStatusContainer: {
         textAlign: 'center',
         paddingTop: 5,
-        paddingBottom: 5,
+        // paddingBottom: 1
     },
     textCenter: {
         textAlign: 'center'
@@ -263,6 +330,23 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         top: 0,
-        height: 120
+        height: 180
+    },
+    linearBackground: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: 90
     },
 });
+
+export const getPenStatus = (fd: Fixture) => {
+    const homeTeamWon = (fd as Fixture).teams.home.winner;
+    if (homeTeamWon) {
+        return `${(fd as Fixture).teams.home.name} won ${(fd as Fixture).score.penalty.home} - ${(fd as Fixture).score.penalty.away} on penalties`
+    }
+    else {
+        return `${(fd as Fixture).teams.away.name} won ${(fd as Fixture).score.penalty.away} - ${(fd as Fixture).score.penalty.home} on penalties`
+    }
+}

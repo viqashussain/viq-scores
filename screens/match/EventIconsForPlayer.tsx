@@ -4,13 +4,16 @@ import { List } from 'react-native-paper';
 import { StyleSheet, Image, SafeAreaView, ScrollView } from 'react-native';
 import { getImageByEvent, getTypeOfEvent } from "./LineupImage";
 import style from "../../components/CalendarCarousel/style";
+import { Event } from "../../types/types";
 
 export default function EventIconsForPlayer(props: { events: any[], playerId: number }) {
     const eventsForPlayer = props.events.filter(x => x.player.id == props.playerId || x.assist?.id == props.playerId);
 
     return (
         <View style={styles.container}>
-            {eventsForPlayer.map((x: any, i: number) => {
+            {eventsForPlayer.map((x: Event, i: number) => {
+                // console.log('getTypeOfEvent(x.type, x.detail) : ' + getTypeOfEvent(x.type, x.detail))
+                // you are not the assister
                 if (x.assist.id != props.playerId) {
                     return (
                         <View key={i} style={styles.innerContainer}>
@@ -22,9 +25,9 @@ export default function EventIconsForPlayer(props: { events: any[], playerId: nu
                         </View>
                     )
                 }
+                // you are the assister
                 else {
-                    if (getTypeOfEvent(x.type, x.detail) == 'Goal')
-                    {
+                    if (getTypeOfEvent(x.type, x.detail) == 'goal') {
                         return (
                             <View key={i} style={styles.innerContainer}>
                                 <Image
@@ -33,10 +36,9 @@ export default function EventIconsForPlayer(props: { events: any[], playerId: nu
                                 />
                                 <Text style={styles.time}>{x.time.elapsed}'</Text>
                             </View>
-                        )   
+                        )
                     }
-                    else
-                    {
+                    else {
                         return (
                             <View key={i} style={styles.innerContainer}>
                                 <Image

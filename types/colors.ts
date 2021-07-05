@@ -9,6 +9,7 @@ export const CUSTOM_COLORS = {
 
     safetyYellow: '#EAD017',
     lightSafetyYellow: '#F8F0B9',
+    superLightSafetuYellow: '#FCF9E3',
     steelBlue: '#427AA1 ',
     aliceBlue: '#EBF2FA',
     maximumGreen: '#679436',

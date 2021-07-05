@@ -36,7 +36,6 @@ export default class CalendarDays extends React.Component {
     if (this.scrollView) {
       const { width, daysInView } = this.props;
 
-      console.log('constants.DAY_SIZE: ' + constants.DAY_SIZE)
 
       let scrollViewWidth = constants.DAY_SIZE;
       if (width || daysInView) {
@@ -47,7 +46,6 @@ export default class CalendarDays extends React.Component {
         + (scrollViewWidth % constants.DAY_SIZE) / 2;
 
       const scrollOffset = { x: xOffset, animated: true };
-      console.log(scrollOffset) 
 
       this.scrollView.scrollTo(scrollOffset);
     }

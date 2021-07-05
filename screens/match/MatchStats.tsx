@@ -22,6 +22,11 @@ export default function MatchStats(props: { fixture: Fixture }) {
 
     return (
         <View style={styles.container}>
+            <List.Item
+            title=''
+            left={x => <Text style={{fontWeight: 'bold'}}>{(props.fixture as Fixture).teams.home.name}</Text>}
+            right={x => <Text style={{fontWeight: 'bold'}}>{(props.fixture as Fixture).teams.away.name}</Text>}
+             />
             {
                 homeStats.map((x, i: number) => {
                     const awayValue = parseInt(awayStats?.find(y => y.type === x.type)!.value ?? '0');

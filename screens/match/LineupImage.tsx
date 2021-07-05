@@ -26,12 +26,10 @@ export default function LineupImage(props: { fixture: Fixture }) {
         home_team_events: getTeamEventsArray(props.fixture, true)
     };
 
-    console.log(home);
-
     const away = {
         name: awayLinup!.team.name,
         module: awayLinup!.formation,
-        team: getLineupArray(awayLinup),
+        team: getLineupArray(awayLinup, true),
         away_team_events: getTeamEventsArray(props.fixture, false)
     };
 
@@ -42,7 +40,7 @@ export default function LineupImage(props: { fixture: Fixture }) {
     )
 }
 
-function getLineupArray(lineup: any)
+function getLineupArray(lineup: any, isAwayTeam = false)
 {
     const formation = lineup.formation;
     let lineupToReturn = [];
@@ -60,27 +58,57 @@ function getLineupArray(lineup: any)
     return lineupToReturn;
 }
 
-function getTeamEventsArray(fixtureDetails: any, getHomeTeam: boolean)
+function getTeamEventsArray(fixtureDetails: Fixture, getHomeTeam: boolean)
 {
     let arrayToReturn = [];
 
-    let teamEvents;
+    let teamId: number;
     if (getHomeTeam)
     {
-        teamEvents = fixtureDetails.events.filter((x: any) => x.team.id == fixtureDetails.teams.home.id);
+        teamId = fixtureDetails.teams.home.id;
     }
     else
     {
-        teamEvents = fixtureDetails.events.filter((x: any) => x.team.id == fixtureDetails.teams.away.id);
+        teamId = fixtureDetails.teams.away.id;
     }
+
+    let teamEvents = fixtureDetails.events.filter((x: any) => x.team.id == teamId);
 
     teamEvents.forEach((x: any) => {
         arrayToReturn.push({
             type_of_event: getTypeOfEvent(x.type, x.detail),
             time: x.time.elapsed,
-            player: x.player.name
+            // need to get the full player name
+            // player: x.type == 'subst' 
+            // ? fixtureDetails.players.find(y => y.team.id == teamId)?.players.find(y => y.player.id == x.assist.id)?.player.name
+            // : fixtureDetails.players.find(y => y.team.id == teamId)?.players.find(y => y.player.id == x.player.id)?.player.name
+            player: getTypeOfEvent(x.type, x.detail) == 'substitution-in' ? x.assist.name : x.player.name,
+            id: getTypeOfEvent(x.type, x.detail) == 'substitution-in' ? x.assist.id : x.player.id,
+            // player: x.player.name,
+            // id: x.player.id
         })
     });
+
+    // we need to get the own goals from the other team
+    const thisTeamPlayers = fixtureDetails.players.find(x => x.team.id == teamId)?.players;
+    const ownGoalEvents = fixtureDetails.events.filter((x: any) => x.team.id != teamId).filter(x => thisTeamPlayers?.map(z => z.player.id)?.includes(x.player.id));
+
+    ownGoalEvents.forEach((x: any) => {
+        arrayToReturn.push({
+            type_of_event: getTypeOfEvent(x.type, x.detail),
+            time: x.time.elapsed,
+            // need to get the full player name
+            // player: x.type == 'subst' 
+            // ? fixtureDetails.players.find(y => y.team.id == teamId)?.players.find(y => y.player.id == x.assist.id)?.player.name
+            // : fixtureDetails.players.find(y => y.team.id == teamId)?.players.find(y => y.player.id == x.player.id)?.player.name
+            player: x.player.name,
+            id: x.player.id
+        })
+    });
+
+    debugger;
+
+    // console.log('abc: ' + JSON.stringify(arrayToReturn.find(x => x.player == 'Robin Gosens')))
 
     return arrayToReturn;
 }
@@ -104,7 +132,14 @@ export function getTypeOfEvent(eventType: string, eventDetail: string): string
     }
     else if (eventType == 'Goal')
     {
-        return 'goal';
+        if (eventDetail == 'Normal Goal')
+        {
+            return 'goal';
+        }
+        else if (eventDetail == 'Own Goal')
+        {
+            return 'own-goal';
+        }
     }
 
     return '';
@@ -129,6 +164,14 @@ export function getImageByEvent(eventType: string, eventDetail: string)
     }
     else if (eventType == 'Goal')
     {
+        if (eventDetail == 'Normal Goal')
+        {
+            return require('../match/images/goal.png');
+        }
+        else if (eventDetail == 'Own Goal')
+        {
+            return require('../match/images/own-goal.png');
+        }
         return require('../match/images/goal.png');
     }
 
