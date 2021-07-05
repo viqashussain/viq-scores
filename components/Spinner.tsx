@@ -7,7 +7,7 @@ import { StyleSheet, View } from 'react-native';
 export function Spinner() {
   return (
     <View style={styles.container}>
-      <ActivityIndicator style={styles.spinner} size={'large'} animating={true} color={CUSTOM_COLORS.green} />
+      <ActivityIndicator style={styles.spinner} size={'large'} animating={true} color={CUSTOM_COLORS.safetyYellow} />
     </View>
   )
 }
