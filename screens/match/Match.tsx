@@ -19,6 +19,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Spinner } from "../../components/Spinner";
 import { getDataFromStorage, storageKeys, storeDataInStorage } from "../../storage/storage";
+import * as Haptics from 'expo-haptics';
 
 export default function Match({ route, navigation }) {
 
@@ -61,6 +62,7 @@ export default function Match({ route, navigation }) {
     const [favouriteTeams, setFavouriteTeams] = useState<{ id: number }[]>([]);
 
     const addTeamToFavourites = (teamId: number) => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         const updatedFavouritesTeams = favouriteTeams.concat([{ id: teamId }]);
         console.log({ updatedFavouritesTeams })
         setFavouriteTeams(updatedFavouritesTeams);
@@ -73,6 +75,7 @@ export default function Match({ route, navigation }) {
     }
 
     const removeTeamFromFavourites = (teamId: number) => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         let updatedFavouritesTeams = favouriteTeams;
         updatedFavouritesTeams = favouriteTeams.filter(x => x.id != teamId);
         setFavouriteTeams(updatedFavouritesTeams);

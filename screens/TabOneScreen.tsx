@@ -1,7 +1,7 @@
 import Reactotron from 'reactotron-react-native'
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Image, SafeAreaView, ScrollView, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, SafeAreaView, ScrollView, RefreshControl, Dimensions, TouchableOpacity, Vibration } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Text, View } from '../components/Themed';
@@ -21,6 +21,7 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { Fixture } from '../types/types';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { getDataFromStorage, storageKeys, storeDataInStorage } from '../storage/storage';
+import * as Haptics from 'expo-haptics';
 
 export default function TabOneScreen(props: any) {
 
@@ -147,12 +148,14 @@ export default function TabOneScreen(props: any) {
   }
 
   const addCompetitionToFavourites = (leagueId: number) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     const updatedFavouritesCompetitions = favouriteCompetitions!.concat([{ id: leagueId }]);
     setFavouriteCompetitions(updatedFavouritesCompetitions);
     storeDataInStorage(updatedFavouritesCompetitions, storageKeys.favouriteCompetitions);
   }
 
   const removeCompetitionFromFavourites = (leagueId: number) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     let updatedFavouritesCompetitions = favouriteCompetitions;
     updatedFavouritesCompetitions = favouriteCompetitions!.filter(x => x.id != leagueId);
     setFavouriteCompetitions(updatedFavouritesCompetitions);
