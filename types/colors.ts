@@ -14,5 +14,6 @@ export const CUSTOM_COLORS = {
     aliceBlue: '#EBF2FA',
     maximumGreen: '#679436',
     acidGreen: '#A5BE00',
-    whiteSmoke: '#F5F5F5'
+    whiteSmoke: '#F5F5F5',
+    lightWhiteSmoke: '##fbfbfb',
   }

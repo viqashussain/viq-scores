@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { View, Text } from '../../components/Themed';
-import { StyleSheet, Image, SafeAreaView, ScrollView, useWindowDimensions, RefreshControl } from 'react-native';
+import { StyleSheet, Image, SafeAreaView, ScrollView, useWindowDimensions, RefreshControl, TouchableOpacity } from 'react-native';
 import { ActivityIndicator, Card, Colors, Divider } from 'react-native-paper';
-import { getFixtureDetails, GET_FIXTURE_DETAILS } from "../../redux/actions";
+import { getFixtureDetails, GET_FIXTURE_DETAILS, SET_FAVOURITE_TEAMS } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { List } from 'react-native-paper';
 import Event from './Event';
@@ -16,8 +16,9 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { Fixture, FixtureDetails } from "../../types/types";
 import { CUSTOM_COLORS } from "../../types/colors";
 import { LinearGradient } from "expo-linear-gradient";
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { Spinner } from "../../components/Spinner";
+import { getDataFromStorage, storageKeys, storeDataInStorage } from "../../storage/storage";
 
 export default function Match({ route, navigation }) {
 
@@ -26,7 +27,8 @@ export default function Match({ route, navigation }) {
     const fetchFixture = async (id: number | null) => dispatch(getFixtureDetails(id));
 
     useEffect(() => {
-        fetchFixture(route.params.match.fixture.id)
+        fetchFixture(route.params.match.fixture.id);
+        getFavouriteTeams();
 
         // return a function to execute at unmount
         return () => {
@@ -56,6 +58,43 @@ export default function Match({ route, navigation }) {
     const [refreshing, setRefreshing] = useState(false);
     const [homeGoalScorersOwnGoalsAndRedCards, setHomeGoalScorersOwnGoalsAndRedCards] = useState('');
     const [awayGoalScorersOwnGoalsAndRedCards, setAwayGoalScorersOwnGoalsAndRedCards] = useState('');
+    const [favouriteTeams, setFavouriteTeams] = useState<{ id: number }[]>([]);
+
+    const addTeamToFavourites = (teamId: number) => {
+        const updatedFavouritesTeams = favouriteTeams.concat([{ id: teamId }]);
+        console.log({ updatedFavouritesTeams })
+        setFavouriteTeams(updatedFavouritesTeams);
+        storeDataInStorage(updatedFavouritesTeams, storageKeys.favouriteTeams);
+
+        dispatch({
+            type: SET_FAVOURITE_TEAMS,
+            payload: updatedFavouritesTeams
+        });
+    }
+
+    const removeTeamFromFavourites = (teamId: number) => {
+        let updatedFavouritesTeams = favouriteTeams;
+        updatedFavouritesTeams = favouriteTeams.filter(x => x.id != teamId);
+        setFavouriteTeams(updatedFavouritesTeams);
+        storeDataInStorage(updatedFavouritesTeams, storageKeys.favouriteTeams);
+
+        dispatch({
+            type: SET_FAVOURITE_TEAMS,
+            payload: updatedFavouritesTeams
+        });
+    }
+
+    const getFavouriteTeams = () => {
+        getDataFromStorage(storageKeys.favouriteTeams).then(x => {
+            if (x != null) {
+                setFavouriteTeams(x);
+                dispatch({
+                    type: SET_FAVOURITE_TEAMS,
+                    payload: x
+                });
+            }
+        });
+    }
 
     // away goals are with the other teams' events
     const initializeHomeGoalScorersOwnGoalsAndRedCards = () => {
@@ -113,9 +152,9 @@ export default function Match({ route, navigation }) {
 
     const [index, setIndex] = useState(0);
     const [routes] = useState([
-        { key: 'first', title: 'Events', icon: 'futbol' },
+        { key: 'first', title: 'Events', icon: 'soccer-ball-o' },
         { key: 'second', title: 'Lineup', icon: 'list-ol' },
-        { key: 'third', title: 'Stats', icon: 'chart-bar' },
+        { key: 'third', title: 'Stats', icon: 'bar-chart-o' },
     ]);
 
     const renderScene = ({ route }) => {
@@ -241,12 +280,48 @@ export default function Match({ route, navigation }) {
                                     <List.Item titleStyle={styles.teamName}
                                         description={homeGoalScorersOwnGoalsAndRedCards}
                                         title={`${fixtureDetails.teams.home.name}`}
-                                        left={props => <Image style={styles.logoImage} source={{ uri: fixtureDetails.teams.home.logo }} />}
+                                        left={props => {
+                                            return (
+                                                <View style={{ display: 'flex', flexDirection: 'row', backgroundColor: 'transparent' }}>
+                                                    <View style={{ backgroundColor: 'transparent' }}>
+                                                        {
+                                                            favouriteTeams.findIndex(y => y.id === fixtureDetails.teams.home.id) != -1 ?
+                                                                <TouchableOpacity style={{ paddingTop: 10, paddingRight: 5 }} onPress={() => removeTeamFromFavourites(fixtureDetails.teams.home.id)}>
+                                                                    <Icon name="star" size={20} color={CUSTOM_COLORS.safetyYellow} />
+                                                                </TouchableOpacity> :
+                                                                <TouchableOpacity style={{ paddingTop: 10, paddingRight: 5 }} onPress={() => addTeamToFavourites(fixtureDetails.teams.home.id)}>
+                                                                    <Icon name="star-o" size={20} color={CUSTOM_COLORS.safetyYellow} />
+                                                                </TouchableOpacity>
+                                                        }
+
+                                                    </View>
+                                                    <Image style={styles.logoImage} source={{ uri: fixtureDetails.teams.home.logo }} />
+                                                </View>
+                                            )
+                                        }}
                                         right={props => <Text style={styles.score}>{`${fixtureDetails.goals.home ?? '-'}`}</Text>} />
                                     <List.Item titleStyle={styles.teamName}
                                         description={awayGoalScorersOwnGoalsAndRedCards}
                                         title={`${fixtureDetails.teams.away.name}`}
-                                        left={props => <Image style={styles.logoImage} source={{ uri: fixtureDetails.teams.away.logo }} />}
+                                        left={props => {
+                                            return (
+                                                <View style={{ display: 'flex', flexDirection: 'row', backgroundColor: 'transparent' }}>
+                                                    <View style={{ backgroundColor: 'transparent' }}>
+                                                        {
+                                                            favouriteTeams.findIndex(y => y.id === fixtureDetails.teams.away.id) != -1 ?
+                                                                <TouchableOpacity style={{ paddingTop: 10, paddingRight: 5 }} onPress={() => removeTeamFromFavourites(fixtureDetails.teams.away.id)}>
+                                                                    <Icon name="star" size={20} color={CUSTOM_COLORS.safetyYellow} />
+                                                                </TouchableOpacity> :
+                                                                <TouchableOpacity style={{ paddingTop: 10, paddingRight: 5 }} onPress={() => addTeamToFavourites(fixtureDetails.teams.away.id)}>
+                                                                    <Icon name="star-o" size={20} color={CUSTOM_COLORS.safetyYellow} />
+                                                                </TouchableOpacity>
+                                                        }
+
+                                                    </View>
+                                                    <Image style={styles.logoImage} source={{ uri: fixtureDetails.teams.away.logo }} />
+                                                </View>
+                                            )
+                                        }}
                                         right={props => <Text style={styles.score}>{`${fixtureDetails.goals.away ?? '-'}`}</Text>} />
 
                                     {

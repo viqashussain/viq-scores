@@ -16,6 +16,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-native-fontawesome": "^0.2.6",
+    "@react-native-async-storage/async-storage": "^1.15.5",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "5.11.2",
     "@react-navigation/native": "~5.8.10",
@@ -59,6 +60,7 @@
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",
     "jest-expo": "^41.0.0",
+    "reactotron-react-native": "^5.0.0",
     "typescript": "~4.0.0"
   },
   "private": true

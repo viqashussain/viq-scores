@@ -1,35 +1,31 @@
+import Reactotron from 'reactotron-react-native'
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Image, SafeAreaView, ScrollView, RefreshControl, Dimensions, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, SafeAreaView, ScrollView, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Text, View } from '../components/Themed';
-import { getFixturesForDate, getTodaysFixtures } from '../redux/actions';
-import { Button, Divider, List } from 'react-native-paper';
+import { getFixturesForDate, getTodaysFixtures, SET_FAVOURITE_TEAMS } from '../redux/actions';
+import { Button, List } from 'react-native-paper';
 import NotStartedFixture from './fixtures/NotStartedFixture';
 import LiveFixture from './fixtures/LiveFixture';
-import { ActivityIndicator, Colors } from 'react-native-paper';
-import moment from 'moment';
-import CalendarDays from '../components/CalendarCarousel';
+import moment, { Moment } from 'moment';
 import FinishedFixture from './fixtures/FinishedFixture';
 import MiscFixture from './fixtures/MiscFixture';
-import Carousel, { CarouselProperties } from 'react-native-snap-carousel';
+import Carousel from 'react-native-snap-carousel';
 import { CUSTOM_COLORS } from '../types/colors';
 import { LinearGradient } from 'expo-linear-gradient';
-import { white } from 'react-native-paper/lib/typescript/styles/colors';
 import { Spinner } from '../components/Spinner';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCoffee, faTable } from '@fortawesome/free-solid-svg-icons';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { Fixture } from '../types/types';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
-
+import { getDataFromStorage, storageKeys, storeDataInStorage } from '../storage/storage';
 
 export default function TabOneScreen(props: any) {
 
-
   const { todaysFixtures, oneDayAgoFixtures, twoDaysAgoFixtures, threeDaysAgoFixtures, fourDaysAgoFixtures, fiveDaysAgoFixtures, sixDaysAgoFixtures, sevenDaysAgoFixtures,
-    oneDayFutureFixtures, twoDaysFutureFixtures, threeDaysFutureFixtures, fourDaysFutureFixtures, fiveDaysFutureFixtures, sixDaysFutureFixtures, sevenDaysFutureFixtures } = useSelector(state => state.fixturesReducer);
+    oneDayFutureFixtures, twoDaysFutureFixtures, threeDaysFutureFixtures, fourDaysFutureFixtures, fiveDaysFutureFixtures, sixDaysFutureFixtures, sevenDaysFutureFixtures, favouriteTeams } = useSelector(state => state.fixturesReducer);
   const dispatch = useDispatch();
   const fetchTodaysFixtures = async () => dispatch(getTodaysFixtures());
   const fetchFixturesForDate = async (date: Moment) => dispatch(getFixturesForDate(date));
@@ -37,8 +33,12 @@ export default function TabOneScreen(props: any) {
 
 
   const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'));
+  const [competitionTypeSelected, setCompetitionTypeSelected] = useState<'all' | 'favourite-competitions' | 'favourite-teams'>('all');
   const [isLoaded, setIsLoaded] = useState(false);
-  const [fixtures, setFixtures] = useState([]);
+  const [fixtures, setFixtures] = useState<Fixture[][]>([]);
+  const [filteredFixtures, setFilteredFixtures] = useState<Fixture[][]>([]);
+  const [favouriteCompetitions, setFavouriteCompetitions] = useState<{ id: number }[] | null>(null);
+  // const [favouriteTeams, setFavouriteTeams] = useState<{ id: number }[]>([]);
 
   const [refreshing, setRefreshing] = useState(false);
   const [carouselItems] = useState([
@@ -67,12 +67,33 @@ export default function TabOneScreen(props: any) {
   }, []);
 
   // get fixtures for today on load
-  useEffect(() => { fetchTodaysFixtures() }, []);
+  // initialise
+  useEffect(() => {
+    fetchTodaysFixtures();
+    getFavouriteCompetitionsFromStorage();
+    getFavouriteTeamsFromStorage();
+    getCompetitionTypeFromStorage();
+  }, []);
+
+  useEffect(() => {
+    if (favouriteCompetitions != null && competitionTypeSelected == 'favourite-competitions')
+    {
+      setFilteredFixtures(getFavouriteCompetitionFixtures());
+    }
+  }, [favouriteCompetitions, competitionTypeSelected, fixtures]);
+
+  useEffect(() => {
+    if (favouriteTeams != null && competitionTypeSelected == 'favourite-teams')
+    {
+      setFilteredFixtures(getFavouriteTeamFixtures());
+    }
+  }, [favouriteTeams, competitionTypeSelected, fixtures]);
 
   useEffect(() => {
     setFixtures(todaysFixtures);
     if (todaysFixtures.length) {
       setIsLoaded(true);
+      setFilteredFixtures(todaysFixtures);
     }
   }, [todaysFixtures]);
 
@@ -91,18 +112,6 @@ export default function TabOneScreen(props: any) {
   useEffect(() => { setFixtures(fiveDaysFutureFixtures) }, [fiveDaysFutureFixtures]);
   useEffect(() => { setFixtures(sixDaysFutureFixtures) }, [sixDaysFutureFixtures]);
   useEffect(() => { setFixtures(sevenDaysFutureFixtures) }, [sevenDaysFutureFixtures]);
-
-  // const fetch = async () => {
-  //   fetchTodaysFixtures();
-  //   setFixtures(todaysFixtures);
-  //   setIsLoaded(true);
-  // };
-
-  // useEffect(() => {
-
-
-  //   fetch();
-  // }, []);
 
   const [expanded, setExpanded] = React.useState(true);
 
@@ -135,6 +144,110 @@ export default function TabOneScreen(props: any) {
 
   const goToStandings = (leagueId: number) => {
     props.navigation.navigate('Standings', { leagueId });
+  }
+
+  const addCompetitionToFavourites = (leagueId: number) => {
+    const updatedFavouritesCompetitions = favouriteCompetitions!.concat([{ id: leagueId }]);
+    setFavouriteCompetitions(updatedFavouritesCompetitions);
+    storeDataInStorage(updatedFavouritesCompetitions, storageKeys.favouriteCompetitions);
+  }
+
+  const removeCompetitionFromFavourites = (leagueId: number) => {
+    let updatedFavouritesCompetitions = favouriteCompetitions;
+    updatedFavouritesCompetitions = favouriteCompetitions!.filter(x => x.id != leagueId);
+    setFavouriteCompetitions(updatedFavouritesCompetitions);
+    storeDataInStorage(updatedFavouritesCompetitions, storageKeys.favouriteCompetitions);
+  }
+
+  const getFavouriteCompetitionsFromStorage = async () => {
+    return await getDataFromStorage(storageKeys.favouriteCompetitions).then(x => {
+      if (x != null) {
+        setFavouriteCompetitions(x);
+      }
+    });
+  }
+
+  const getFavouriteTeamsFromStorage = async () => {
+    return await getDataFromStorage(storageKeys.favouriteTeams).then(x => {
+      if (x != null) {
+        dispatch({
+          type: SET_FAVOURITE_TEAMS,
+          payload: x
+        });
+      }
+    });
+  }
+
+  const allCompetitionsTypeSelected = () => {
+    setCompetitionTypeSelected('all');
+    setFilteredFixtures(fixtures);
+  }
+
+  const getCompetitionTypeFromStorage = async () =>
+  {
+    const t: 'all' | 'favourite-competitions' | 'favourite-teams' = await getDataFromStorage(storageKeys.favouritesSelectedFilter);
+    setCompetitionTypeSelected(t);
+
+    if (t == 'all')
+    {
+      setFilteredFixtures(fixtures);
+    }
+  }
+
+  const competitionTypeUpdated = (filter: 'all' | 'favourite-competitions' | 'favourite-teams') => {
+    storeDataInStorage(filter, storageKeys.favouritesSelectedFilter);
+  }
+
+  const favouriteCompetitionsTypeSelected = () => {
+    setCompetitionTypeSelected('favourite-competitions');
+    setFilteredFixtures(getFavouriteCompetitionFixtures());
+  }
+
+  const favouriteTeamsTypeSelected = () => {
+    setCompetitionTypeSelected('favourite-teams');
+    setFilteredFixtures(getFavouriteTeamFixtures());
+  }
+
+  const getFavouriteCompetitionFixtures = () => {
+    const favouriteLeagueIds = favouriteCompetitions!.map(x => x.id);
+    if (!favouriteLeagueIds.length)
+    {
+      return [[]];
+    }
+    return fixtures
+      .filter(fixturesGroup => {
+        return (fixturesGroup.some(f => {
+          return favouriteLeagueIds.includes(f.league.id)
+        }))
+      })
+      .map(fixturesGroup => {
+        return fixturesGroup.map(f => {
+          return f;
+        });
+      });
+
+  }
+
+  const getFavouriteTeamFixtures = () => {
+    const favouriteTeamIds = favouriteTeams.map(x => x.id);
+    if (!favouriteTeamIds.length)
+    {
+      return [[]]; 
+    }
+    let arrayToReturn: Fixture[][] = [];
+    fixtures
+      .forEach(fixturesGroup => {
+        let currentArray: Fixture[] = [];
+        fixturesGroup.forEach(f => {
+          if (favouriteTeamIds.includes(f.teams.home.id) || favouriteTeamIds.includes(f.teams.away.id)) {
+            currentArray.push(f);
+          }
+        });
+        if (currentArray.length) {
+          arrayToReturn.push(currentArray);
+        }
+      });
+    return arrayToReturn;
   }
 
   const dateCalendarItem = ({ item, index }) => {
@@ -227,13 +340,33 @@ export default function TabOneScreen(props: any) {
 
                   <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
 
+                  <View style={styles.favouriteCompetitionsButtonContainer}>
+                    <Button style={competitionTypeSelected == 'all' ? styles.filterButtonSelected : null} uppercase={false} color={CUSTOM_COLORS.safetyYellow} mode="contained" onPress={() => {allCompetitionsTypeSelected(); competitionTypeUpdated('all');}}>All</Button>
+                    <Button style={competitionTypeSelected == 'favourite-competitions' ? styles.filterButtonSelected : null} uppercase={false} color={CUSTOM_COLORS.safetyYellow} icon="star" mode="contained" onPress={() => {favouriteCompetitionsTypeSelected(); competitionTypeUpdated('favourite-competitions')}}>Competitions</Button>
+                    <Button style={competitionTypeSelected == 'favourite-teams' ? styles.filterButtonSelected : null} uppercase={false} color={CUSTOM_COLORS.safetyYellow} icon="star" mode="contained" onPress={() => {favouriteTeamsTypeSelected(); competitionTypeUpdated('favourite-teams');}}>Teams</Button>
+                  </View>
+
+                  <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+
                   <View>
 
-                    {fixtures.map((x: Fixture[], i: number) => {
+                    {filteredFixtures.map((x: Fixture[], i: number) => {
                       // if (i > 0) {
                       //   return;
                       // }
                       return <View style={{ display: 'flex', flexDirection: 'row' }}>
+
+                        {
+                          favouriteCompetitions?.findIndex(y => y.id === x[0].league.id) != -1 ?
+                            <TouchableOpacity style={styles.touchableIcon} onPress={() => removeCompetitionFromFavourites(x[0].league.id)}>
+                              <Icon name="star" size={20} color={CUSTOM_COLORS.safetyYellow} />
+                            </TouchableOpacity>
+                            :
+                            <TouchableOpacity style={styles.touchableIcon} onPress={() => addCompetitionToFavourites(x[0].league.id)}>
+                              <Icon name="star-o" size={20} color={CUSTOM_COLORS.safetyYellow} />
+                            </TouchableOpacity>
+                        }
+
                         <List.Section style={styles.listSection} key={i}>
                           <List.Accordion
                             style={{ backgroundColor: CUSTOM_COLORS.lightSafetyYellow }}
@@ -242,18 +375,18 @@ export default function TabOneScreen(props: any) {
                             {x.map((match: any, j: number) => {
                               if (match.fixture.status.short === 'NS') {
                                 return (
-                                  <NotStartedFixture key={match.fixture.id} navigation={props.navigation} key={j} match={match} />
+                                  <NotStartedFixture key={match.fixture.id} navigation={props.navigation} match={match} />
                                 )
                               }
                               else if (match.fixture.status.short === '1H' || match.fixture.status.short === '2H' || match.fixture.status.short === 'ET' || match.fixture.status.short === 'P' || match.fixture.status.short === 'BT') {
                                 return (
-                                  <LiveFixture key={match.fixture.id} navigation={props.navigation} key={j} match={match} />
+                                  <LiveFixture key={match.fixture.id} navigation={props.navigation} match={match} />
                                 )
                               }
                               else if (match.fixture.status.short === 'HT' || match.fixture.status.short === 'FT'
                                 || match.fixture.status.short === 'AET' || match.fixture.status.short === 'PEN') {
                                 return (
-                                  <FinishedFixture key={match.fixture.id} navigation={props.navigation} key={j} match={match} />
+                                  <FinishedFixture key={match.fixture.id} navigation={props.navigation} match={match} />
                                 )
                               }
                               else if (match.fixture.status.short === 'TBD' || match.fixture.status.short === 'SUSP'
@@ -261,7 +394,7 @@ export default function TabOneScreen(props: any) {
                                 || match.fixture.status.short === 'CANC' || match.fixture.status.short === 'ABD'
                                 || match.fixture.status.short === 'AWD' || match.fixture.status.short === 'WO') {
                                 return (
-                                  <MiscFixture key={match.fixture.id} navigation={props.navigation} key={j} match={match} />
+                                  <MiscFixture key={match.fixture.id} navigation={props.navigation} match={match} />
                                 )
                               }
                             })}
@@ -386,5 +519,20 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     // paddingRight: 20,
     flex: 1,
+  },
+  touchableIcon: {
+    paddingTop: 25,
+    paddingLeft: 20,
+    paddingRight: 0,
+    display: 'flex'
+  },
+  favouriteCompetitionsButtonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    color: CUSTOM_COLORS.lightSafetyYellow
+  },
+  filterButtonSelected: {
+    backgroundColor: CUSTOM_COLORS.acidGreen
   }
 });

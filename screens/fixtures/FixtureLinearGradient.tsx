@@ -8,7 +8,7 @@ export default function FixtureLinearGradient() {
     return (
         <LinearGradient
         // Background Linear Gradient
-        colors={[CUSTOM_COLORS.whiteSmoke, 'transparent']}
+        colors={[CUSTOM_COLORS.superLightSafetuYellow, 'transparent']}
         style={styles.background}
     />
     )

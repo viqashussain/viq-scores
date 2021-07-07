@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     },
     teamName: {
         paddingLeft: 10,
-        fontSize: 20,
+        fontSize: 14,
     },
     goalsCount: {
         fontSize: 20,

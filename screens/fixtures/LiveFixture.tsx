@@ -82,11 +82,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center', //Centered vertically
         alignItems: 'center', // Centered horizontally
         textAlignVertical: 'center',
-        width: 80
+        width: 40
     },
     teamName: {
         paddingLeft: 10,
-        fontSize: 20,
+        fontSize: 14,
     },
     goalsCount: {
         fontSize: 20,

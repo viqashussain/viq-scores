@@ -1,6 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import { GET_FIVE_DAYS_AGO_FIXTURES, GET_FIVE_DAYS_FUTURE_FIXTURES, GET_FIXTURE_DETAILS, GET_FOUR_DAYS_AGO_FIXTURES, GET_FOUR_DAYS_FUTURE_FIXTURES, GET_LEAGUE_STANDINGS, GET_ONE_DAY_AGO_FIXTURES, GET_ONE_DAY_FUTURE_FIXTURES, GET_SEVEN_DAYS_AGO_FIXTURES, GET_SEVEN_DAYS_FUTURE_FIXTURES, GET_SIX_DAYS_AGO_FIXTURES, GET_SIX_DAYS_FUTURE_FIXTURES, GET_THREE_DAYS_AGO_FIXTURES, GET_THREE_DAYS_FUTURE_FIXTURES, GET_TODAYS_FIXTURES, GET_TWO_DAYS_AGO_FIXTURES, GET_TWO_DAYS_FUTURE_FIXTURES } from './actions';
+import { GET_FIVE_DAYS_AGO_FIXTURES, GET_FIVE_DAYS_FUTURE_FIXTURES, GET_FIXTURE_DETAILS, GET_FOUR_DAYS_AGO_FIXTURES, GET_FOUR_DAYS_FUTURE_FIXTURES, GET_LEAGUE_STANDINGS, GET_ONE_DAY_AGO_FIXTURES, GET_ONE_DAY_FUTURE_FIXTURES, GET_SEVEN_DAYS_AGO_FIXTURES, GET_SEVEN_DAYS_FUTURE_FIXTURES, GET_SIX_DAYS_AGO_FIXTURES, GET_SIX_DAYS_FUTURE_FIXTURES, GET_THREE_DAYS_AGO_FIXTURES, GET_THREE_DAYS_FUTURE_FIXTURES, GET_TODAYS_FIXTURES, GET_TWO_DAYS_AGO_FIXTURES, GET_TWO_DAYS_FUTURE_FIXTURES, SET_FAVOURITE_TEAMS } from './actions';
 
 const initialState = {
     todaysFixtures: [],
@@ -23,7 +23,9 @@ const initialState = {
 
     fixtureDetails: null,
 
-    leagueStandings: []
+    leagueStandings: [],
+
+    favouriteTeams: []
 };
 
 function fixturesReducer(state = initialState, action: any) {
@@ -68,6 +70,9 @@ function fixturesReducer(state = initialState, action: any) {
 
         case GET_LEAGUE_STANDINGS:
             return { ...state, leagueStandings: action.payload };
+
+        case SET_FAVOURITE_TEAMS:
+            return { ...state, favouriteTeams: action.payload };
 
         default:
             return state;

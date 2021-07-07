@@ -1,3 +1,16 @@
+// import Reactotron from 'reactotron-react-native'
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// if (__DEV__) {
+//   Reactotron
+//     .setAsyncStorageHandler(AsyncStorage) // AsyncStorage would either come from `react-native` or `@react-native-community/async-storage` depending on where you get it from
+//     .configure() // controls connection & communication settings
+//     .useReactNative() // add all built-in react native plugins
+//     .connect() // let's connect!
+//   // import('./ReactotronConfig').then(() => console.log('Reactotron Configured'))
+// }
+
+
 import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
@@ -27,7 +40,7 @@ export default function App() {
       <SafeAreaProvider>
         <Provider store={store}>
           <PaperProvider>
-              <Navigation colorScheme={colorScheme} />
+            <Navigation colorScheme={colorScheme} />
             <StatusBar />
           </PaperProvider>
         </Provider>
