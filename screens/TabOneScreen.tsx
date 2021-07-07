@@ -268,7 +268,7 @@ export default function TabOneScreen(props: any) {
 
         <LinearGradient
           // Background Linear Gradient
-          colors={[CUSTOM_COLORS.safetyYellow, 'transparent']}
+          colors={[CUSTOM_COLORS.safetyYellow, CUSTOM_COLORS.acidGreen]}
           style={styles.background}
         />
 
@@ -445,7 +445,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 20,
     paddingBottom: 20,
-    backgroundColor: CUSTOM_COLORS.lightSafetyYellow,
     textAlign: 'center',
     display: 'flex',
     flexDirection: 'row'

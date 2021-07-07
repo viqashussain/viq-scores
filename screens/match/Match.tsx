@@ -260,7 +260,7 @@ export default function Match({ route, navigation }) {
                                 <View style={styles.matchDetailsContainer}>
                                     <LinearGradient
                                         // Background Linear Gradient
-                                        colors={[CUSTOM_COLORS.safetyYellow, '#FFFFFF']}
+                                        colors={[CUSTOM_COLORS.lightSafetyYellow, 'white']}
                                         style={styles.linearBackground}
                                     />
                                     <Text style={{ textAlign: 'center', zIndex: 999 }}>{convertUtcDateToLocal(fixtureDetails.fixture.date)}</Text>
@@ -273,7 +273,7 @@ export default function Match({ route, navigation }) {
 
                                     <LinearGradient
                                         // Background Linear Gradient
-                                        colors={['#FFFFFF', CUSTOM_COLORS.safetyYellow]}
+                                        colors={[CUSTOM_COLORS.safetyYellow, 'white', CUSTOM_COLORS.acidGreen]}
                                         style={styles.matchStatusContainerBackground}
                                     />
 
@@ -423,14 +423,14 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         top: 0,
-        height: 180
+        height: 120
     },
     linearBackground: {
         position: 'absolute',
         left: 0,
         right: 0,
         top: 0,
-        height: 90
+        height: 50
     },
 });
 
