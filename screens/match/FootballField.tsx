@@ -63,7 +63,7 @@ export default class FootballField extends Component {
                         }}>
                         {this.state.home.home_team_events
                           .filter(el => el.id == d.id &&
-                            el.type_of_event == 'yellow-card')
+                            el.type_of_event == 'Yellow Card')
                           .map(
                             (el, z) =>
                               <Image
@@ -79,7 +79,23 @@ export default class FootballField extends Component {
                           )}
                         {this.state.home.home_team_events
                           .filter(el => el.id == d.id &&
-                            el.type_of_event == 'red-card')
+                            el.type_of_event == 'Second Yellow Card')
+                          .map(
+                            (el, z) =>
+                              <Image
+                                key={'hy' + z}
+                                source={require('./images/second-yellow-card.png')}
+                                style={{
+                                  width: 12,
+                                  height: 15,
+                                  position: 'absolute',
+                                  left: -12 * (z == 0 ? 1 : z * 5),
+                                }}
+                              />
+                          )}
+                        {this.state.home.home_team_events
+                          .filter(el => el.id == d.id &&
+                            el.type_of_event == 'Red Card')
                           .map(
                             (el, z) =>
                               <Image
@@ -96,7 +112,7 @@ export default class FootballField extends Component {
                         {
                           this.state.home.home_team_events
                             .filter(el => el.id == d.id &&
-                              el.type_of_event == 'goal')
+                              el.type_of_event == 'Normal Goal')
                             .map(
                               (el, z) =>
                                 <Image
@@ -113,7 +129,7 @@ export default class FootballField extends Component {
                             )}
                         {this.state.home.home_team_events
                           .filter(el => el.id == d.id &&
-                            el.type_of_event == 'own-goal')
+                            el.type_of_event == 'Own Goal')
                           .map(
                             (el, z) =>
                               <Image
@@ -133,7 +149,7 @@ export default class FootballField extends Component {
                         </View>
                         {this.state.home.home_team_events
                           .filter(el => el.id == d.id &&
-                            el.type_of_event == 'substitution-in')
+                            el.type_of_event == 'subst')
                           .map(
                             (el, z) =>
                               <Image
@@ -172,7 +188,7 @@ export default class FootballField extends Component {
                         }}>
                         {this.state.away.away_team_events
                           .filter(el => el.id == d.id &&
-                            el.type_of_event == 'yellow-card')
+                            el.type_of_event == 'Yellow Card')
                           .map(
                             (el, z) =>
                               <Image
@@ -188,7 +204,23 @@ export default class FootballField extends Component {
                           )}
                         {this.state.away.away_team_events
                           .filter(el => el.id == d.id &&
-                            el.type_of_event == 'red-card')
+                            el.type_of_event == 'Second Yellow Card')
+                          .map(
+                            (el, z) =>
+                              <Image
+                                key={'ay' + z}
+                                source={require('./images/second-yellow-card.png')}
+                                style={{
+                                  width: 12,
+                                  height: 15,
+                                  position: 'absolute',
+                                  left: -12 * (z == 0 ? 1 : z * 5),
+                                }}
+                              />
+                          )}
+                        {this.state.away.away_team_events
+                          .filter(el => el.id == d.id &&
+                            el.type_of_event == 'Red Card')
                           .map(
                             (el, z) =>
                               <Image
@@ -205,7 +237,7 @@ export default class FootballField extends Component {
                         {
                           this.state.away.away_team_events
                             .filter(el => el.id == d.id &&
-                              el.type_of_event == 'goal')
+                              el.type_of_event == 'Normal Goal')
                             .map(
                               (el, z) =>
                                 <Image
@@ -222,7 +254,7 @@ export default class FootballField extends Component {
                             )}
                         {this.state.away.away_team_events
                           .filter(el => el.id == d.id &&
-                            el.type_of_event == 'own-goal')
+                            el.type_of_event == 'Own Goal')
                           .map(
                             (el, z) =>
                               <Image
@@ -242,7 +274,7 @@ export default class FootballField extends Component {
                         </View>
                         {this.state.away.away_team_events
                           .filter(el => el.id == d.id &&
-                            el.type_of_event == 'substitution-in')
+                            el.type_of_event == 'subst')
                           .map(
                             (el, z) =>
                               <Image

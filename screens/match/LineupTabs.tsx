@@ -3,13 +3,14 @@ import { View, Text } from '../../components/Themed';
 import { List, Title } from 'react-native-paper';
 import { StyleSheet, Image, SafeAreaView, ScrollView, useWindowDimensions } from 'react-native';
 import FootballField from "./FootballField";
-import { Fixture } from "../../types/types";
+import { Fixture, Player, Player2, StartXI, Substitute } from "../../types/types";
 import { TabBar, TabView } from "react-native-tab-view";
 import LineupImage from "./LineupImage";
 import Bench from "./Bench";
 import Lineup from "./Lineup";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { CUSTOM_COLORS } from "../../types/colors";
+import EventIconsForPlayer from "./EventIconsForPlayer";
 // import FootballField from 'react-native-football-lineup';
 
 
@@ -23,6 +24,31 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
 
     const layout = useWindowDimensions();
 
+    const LineupSection = (props: { i: number, player: StartXI | Substitute, fixtureDetails: Fixture }) => {
+        return (
+            <List.Item
+                key={props.i}
+                title={''}
+                left={y => {
+                    return (
+                        <View style={{ display: 'flex', flexDirection: 'row' }}>
+                            <Text style={{ width: 20 }}>{props.player.player.number}</Text>
+                            <Image style={styles.playerImage} source={{ uri: getPlayerImageUrl(props.player.player.id) }} />
+                            {
+                                isPlayerCaptain(props.player.player.id)
+                                ? <Image style={styles.captainLogo} source={require(`./images/captain.png`)} />
+                                : <View></View>
+                            }
+                            <Text style={{ fontSize: 16, paddingLeft: 10 }}>{props.player.player.name}</Text>
+                            <EventIconsForPlayer events={props.fixtureDetails.events} playerId={props.player.player.id} />
+                        </View>
+                    )
+                }}>
+                )
+            </List.Item>
+        )
+    }
+
     const renderScene = ({ route }) => {
         switch (route.key) {
             case 'first':
@@ -31,43 +57,15 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
                         <Title >Starting XI</Title>
 
                         {
-                            props.fixtureDetails.lineups[0].startXI.map(x => {
-                                return (
-                                    <List.Item
-                                        title={x.player.name}
-                                        left={y => {
-                                            return (
-                                                <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                                    <Text style={{ width: 20 }}>{x.player.number}</Text>
-                                                    <Image style={styles.playerImage} source={{ uri: getPlayerImageUrl(x.player.id) }} />
-                                                </View>
-                                            )
-                                        }}>
-
-                                    </List.Item>
-                                )
-                            })
+                            props.fixtureDetails.lineups[0].startXI.map((x, i: number) => (
+                                <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />
+                            ))
                         }
 
                         <Title>Bench</Title>
 
                         {
-                            props.fixtureDetails.lineups[0].substitutes.map(x => {
-                                return (
-                                    <List.Item
-                                        title={x.player.name}
-                                        left={y => {
-                                            return (
-                                                <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                                    <Text style={{ width: 20 }}>{x.player.number}</Text>
-                                                    <Image style={styles.playerImage} source={{ uri: getPlayerImageUrl(x.player.id) }} />
-                                                </View>
-                                            )
-                                        }}>
-
-                                    </List.Item>
-                                )
-                            })
+                            props.fixtureDetails.lineups[0].substitutes.map((x, i: number) => <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />)
                         }
                     </View>
                 </ScrollView>
@@ -77,43 +75,13 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
                         <Title >Starting XI</Title>
 
                         {
-                            props.fixtureDetails.lineups[1].substitutes.map(x => {
-                                return (
-                                    <List.Item
-                                        title={x.player.name}
-                                        left={y => {
-                                            return (
-                                                <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                                    <Text style={{ width: 20 }}>{x.player.number}</Text>
-                                                    <Image style={styles.playerImage} source={{ uri: getPlayerImageUrl(x.player.id) }} />
-                                                </View>
-                                            )
-                                        }}>
-
-                                    </List.Item>
-                                )
-                            })
+                            props.fixtureDetails.lineups[1].startXI.map((x, i: number) => <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />)
                         }
 
                         <Title>Bench</Title>
 
                         {
-                            props.fixtureDetails.lineups[1].startXI.map(x => {
-                                return (
-                                    <List.Item
-                                        title={x.player.name}
-                                        left={y => {
-                                            return (
-                                                <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                                    <Text style={{ width: 20 }}>{x.player.number}</Text>
-                                                    <Image style={styles.playerImage} source={{ uri: getPlayerImageUrl(x.player.id) }} />
-                                                </View>
-                                            )
-                                        }}>
-
-                                    </List.Item>
-                                )
-                            })
+                            props.fixtureDetails.lineups[1].substitutes.map((x, i: number) => <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />)
                         }
                     </View>
                 </ScrollView>
@@ -125,6 +93,11 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
     const getPlayerImageUrl = (playerId: number) => {
         const allPlayers = props.fixtureDetails.players[0].players.concat(props.fixtureDetails.players[1].players);
         return allPlayers.find(x => x.player.id == playerId)?.player.photo;
+    }
+
+    const isPlayerCaptain = (playerId: number) => {
+        const allPlayers = props.fixtureDetails.players[0].players.concat(props.fixtureDetails.players[1].players);
+        return allPlayers.find(x => x.player.id == playerId)?.statistics[0].games.captain;
     }
 
     const renderTabBar = (props: any) => (
@@ -182,6 +155,12 @@ const styles = StyleSheet.create({
     playerImage: {
         height: 25,
         width: 25,
+        justifyContent: 'flex-end',
+        resizeMode: 'contain'
+    },
+    captainLogo: {
+        height: 15,
+        width: 15,
         justifyContent: 'flex-end',
         resizeMode: 'contain'
     },

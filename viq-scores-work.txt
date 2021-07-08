@@ -22,5 +22,12 @@ viq-scores work
 - DONE - add tabs to main screen for favourite teams/leagues
 - DONE - add ability to add teams/leagues to favourites
 - add an about section
-- background colour of fixtures
-- auto select fixture filter upon loading
+- DONE - background colour of fixtures
+- DONE - auto select fixture filter upon loading
+- DONE - add tabs for the lineup, with each team in a tab
+- DONE - add event icons for players in the starting 11!
+- DONE - add penalty event
+- DONE - add missed penalty event
+- DONE - implement all available events for icons, including VAR!
+- DONE - assist not showing up correctly
+- DONE - show who the captain is in the lineup and the starting XI

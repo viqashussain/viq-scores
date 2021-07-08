@@ -27,7 +27,7 @@ export default function EventIconsForPlayer(props: { events: any[], playerId: nu
                 }
                 // you are the assister
                 else {
-                    if (getTypeOfEvent(x.type, x.detail) == 'goal') {
+                    if (x.detail == 'Normal Goal' || x.detail == 'Own Goal' || x.detail == 'Penalty') {
                         return (
                             <View key={i} style={styles.innerContainer}>
                                 <Image

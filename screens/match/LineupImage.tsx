@@ -3,7 +3,7 @@ import { View, Text } from '../../components/Themed';
 import { List } from 'react-native-paper';
 import { StyleSheet, Image, SafeAreaView, ScrollView } from 'react-native';
 import FootballField from "./FootballField";
-import { Fixture } from "../../types/types";
+import { Event, Fixture } from "../../types/types";
 // import FootballField from 'react-native-football-lineup';
 
 
@@ -74,9 +74,9 @@ function getTeamEventsArray(fixtureDetails: Fixture, getHomeTeam: boolean)
 
     let teamEvents = fixtureDetails.events.filter((x: any) => x.team.id == teamId);
 
-    teamEvents.forEach((x: any) => {
+    teamEvents.forEach((x: Event) => {
         arrayToReturn.push({
-            type_of_event: getTypeOfEvent(x.type, x.detail),
+            type_of_event: x.type == 'subst' ? 'subst' : x.detail,
             time: x.time.elapsed,
             // need to get the full player name
             // player: x.type == 'subst' 
@@ -93,9 +93,9 @@ function getTeamEventsArray(fixtureDetails: Fixture, getHomeTeam: boolean)
     const thisTeamPlayers = fixtureDetails.players.find(x => x.team.id == teamId)?.players;
     const ownGoalEvents = fixtureDetails.events.filter((x: any) => x.team.id != teamId).filter(x => thisTeamPlayers?.map(z => z.player.id)?.includes(x.player.id));
 
-    ownGoalEvents.forEach((x: any) => {
+    ownGoalEvents.forEach((x: Event) => {
         arrayToReturn.push({
-            type_of_event: getTypeOfEvent(x.type, x.detail),
+            type_of_event: x.detail,
             time: x.time.elapsed,
             // need to get the full player name
             // player: x.type == 'subst' 
@@ -123,6 +123,10 @@ export function getTypeOfEvent(eventType: string, eventDetail: string): string
         {
             return 'yellow-card';
         }
+        else if (eventDetail == 'Second Yellow card')
+        {
+            return 'yellow-card';
+        }
         else
         {
             return 'red-card';
@@ -137,6 +141,14 @@ export function getTypeOfEvent(eventType: string, eventDetail: string): string
         else if (eventDetail == 'Own Goal')
         {
             return 'own-goal';
+        }
+        else if (eventDetail == 'Missed Penalty')
+        {
+            return 'missed-penalty';
+        }
+        else if (eventDetail == 'Penalty')
+        {
+            return 'penalty-scored';
         }
     }
 
@@ -155,6 +167,10 @@ export function getImageByEvent(eventType: string, eventDetail: string)
         {
             return require('../match/images/yellow-card.png');
         }
+        else if (eventDetail == 'Second Yellow Card')
+        {
+            return require('../match/images/second-yellow-card.png');
+        }
         else
         {
             return require('../match/images/red-card.png');
@@ -169,6 +185,14 @@ export function getImageByEvent(eventType: string, eventDetail: string)
         else if (eventDetail == 'Own Goal')
         {
             return require('../match/images/own-goal.png');
+        }
+        else if (eventDetail == 'Penalty')
+        {
+            return require('../match/images/penalty-scored.png');
+        }
+        else if (eventDetail == 'Missed Penalty')
+        {
+            return require('../match/images/penalty-missed.png');
         }
         return require('../match/images/goal.png');
     }

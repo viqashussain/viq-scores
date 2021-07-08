@@ -117,6 +117,9 @@ export default function Match({ route, navigation }) {
             if (x.detail == 'Own Goal') {
                 return `${x.player.name} (${x.time.elapsed}' OG)`;
             }
+            if (x.detail == 'Penalty') {
+                return `${x.player.name} (${x.time.elapsed}' PEN)`;
+            }
             else if (x.detail == 'Red Card') {
                 return `${x.player.name} (${x.time.elapsed}' Red Card)`;
             }
@@ -135,6 +138,9 @@ export default function Match({ route, navigation }) {
         const awayString = awayScorersAndRedCards.map(x => {
             if (x.detail == 'Own Goal') {
                 return `${x.player.name} (${x.time.elapsed}' OG)`;
+            }
+            if (x.detail == 'Penalty') {
+                return `${x.player.name} (${x.time.elapsed}' PEN)`;
             }
             else if (x.detail == 'Red Card') {
                 return `${x.player.name} (${x.time.elapsed}' Red Card)`;
