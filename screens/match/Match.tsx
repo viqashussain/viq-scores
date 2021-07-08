@@ -20,6 +20,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Spinner } from "../../components/Spinner";
 import { getDataFromStorage, storageKeys, storeDataInStorage } from "../../storage/storage";
 import * as Haptics from 'expo-haptics';
+import LineupTabs from "./LineupTabs";
 
 export default function Match({ route, navigation }) {
 
@@ -173,22 +174,7 @@ export default function Match({ route, navigation }) {
             case 'second':
                 return <View key={'second'} style={{ flex: 1 }}>
                     <LineupImage fixture={fixtureDetails} />
-                    <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Starting XI</Text>
-                    <List.Item
-                        title=""
-                        left={x => <Lineup fixture={fixtureDetails} teamId={fixtureDetails.teams.home.id} />}
-                        right={x => <Lineup fixture={fixtureDetails} teamId={fixtureDetails.teams.away.id} />}>
-
-                    </List.Item>
-
-                    <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Bench</Text>
-
-                    <List.Item
-                        title=""
-                        left={x => <Bench fixture={fixtureDetails} teamId={fixtureDetails.teams.home.id} />}
-                        right={x => <Bench fixture={fixtureDetails} teamId={fixtureDetails.teams.away.id} />}>
-
-                    </List.Item>
+                    <LineupTabs fixtureDetails={fixtureDetails} />
                 </View>
             case 'third':
                 return <View key={'third'}>
@@ -426,7 +412,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         top: 0,
-        height: 120
+        height: 150
     },
     linearBackground: {
         position: 'absolute',
