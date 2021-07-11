@@ -336,7 +336,7 @@ export default function Match({ route, navigation }) {
                                                 renderScene={renderScene}
                                                 onIndexChange={setIndex}
                                                 initialLayout={{ width: layout.width }}
-                                                style={{ flex: 1, display: 'flex', height: 1000 }}
+                                                style={{ flex: 1, display: 'flex', height: 1200 }}
                                                 renderTabBar={renderTabBar}
                                             />
                                         ) :
