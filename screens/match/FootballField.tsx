@@ -112,7 +112,7 @@ export default class FootballField extends Component {
                         {
                           this.state.home.home_team_events
                             .filter(el => el.id == d.id &&
-                              el.type_of_event == 'Normal Goal')
+                              (el.type_of_event == 'Normal Goal' || el.type_of_event == 'Penalty'))
                             .map(
                               (el, z) =>
                                 <Image
@@ -237,7 +237,7 @@ export default class FootballField extends Component {
                         {
                           this.state.away.away_team_events
                             .filter(el => el.id == d.id &&
-                              el.type_of_event == 'Normal Goal')
+                              (el.type_of_event == 'Normal Goal' || el.type_of_event == 'Penalty'))
                             .map(
                               (el, z) =>
                                 <Image

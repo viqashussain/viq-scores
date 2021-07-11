@@ -32,3 +32,5 @@ viq-scores work
 - DONE - assist not showing up correctly
 - DONE - show who the captain is in the lineup and the starting XI
 - colour the match stat bars depending on which team is doing better
+- DONE - bug - loading the lineups image initially has the away team reversed.
+- DONE - pen goals not showing line lineups
