@@ -36,8 +36,8 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
                             <Image style={styles.playerImage} source={{ uri: getPlayerImageUrl(props.player.player.id) }} />
                             {
                                 isPlayerCaptain(props.player.player.id)
-                                ? <Image style={styles.captainLogo} source={require(`./images/captain.png`)} />
-                                : <View></View>
+                                    ? <Image style={styles.captainLogo} source={require(`./images/captain.png`)} />
+                                    : <View></View>
                             }
                             <Text style={{ fontSize: 16, paddingLeft: 10 }}>{props.player.player.name}</Text>
                             <EventIconsForPlayer events={props.fixtureDetails.events} playerId={props.player.player.id} />
@@ -67,6 +67,21 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
                         {
                             props.fixtureDetails.lineups[0].substitutes.map((x, i: number) => <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />)
                         }
+
+                        <Title>Coach</Title>
+
+                        <List.Item
+                            title={''}
+                            left={y => {
+                                return (
+                                    <View style={{ display: 'flex', flexDirection: 'row' }}>
+                                        <Image style={styles.playerImage} source={{ uri: props.fixtureDetails.lineups[0].coach.photo }} />
+                                        <Text style={{ fontSize: 16, paddingLeft: 10 }}>{props.fixtureDetails.lineups[0].coach.name}</Text>
+                                    </View>
+                                )
+                            }}>
+                            )
+                        </List.Item>
                     </View>
                 </ScrollView>
             case 'second':
@@ -83,6 +98,21 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
                         {
                             props.fixtureDetails.lineups[1].substitutes.map((x, i: number) => <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />)
                         }
+
+                        <Title>Coach</Title>
+
+                        <List.Item
+                            title={''}
+                            left={y => {
+                                return (
+                                    <View style={{ display: 'flex', flexDirection: 'row' }}>
+                                        <Image style={styles.playerImage} source={{ uri: props.fixtureDetails.lineups[1].coach.photo }} />
+                                        <Text style={{ fontSize: 16, paddingLeft: 10 }}>{props.fixtureDetails.lineups[1].coach.name}</Text>
+                                    </View>
+                                )
+                            }}>
+                            )
+                        </List.Item>
                     </View>
                 </ScrollView>
             default:
@@ -159,8 +189,8 @@ const styles = StyleSheet.create({
         resizeMode: 'contain'
     },
     captainLogo: {
-        height: 15,
-        width: 15,
+        height: 20,
+        width: 20,
         justifyContent: 'flex-end',
         resizeMode: 'contain'
     },
