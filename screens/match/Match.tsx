@@ -170,7 +170,7 @@ export default function Match({ route, navigation }) {
     const renderScene = ({ route }) => {
         switch (route.key) {
             case 'first':
-                return <View key={'first'} style={{ flex: 1, paddingLeft: 10, paddingRight: 10 }}>
+                return <View key={'first'} style={{ flex: 1, padding: 20 }}>
                     {fixtureDetails.events.map((x: any, i: number) => {
                         return (
                             <Event key={i} event={x} homeTeamId={fixtureDetails.teams.home.id} awayTeamId={fixtureDetails.teams.away.id} />

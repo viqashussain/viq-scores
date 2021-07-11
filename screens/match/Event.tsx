@@ -38,12 +38,12 @@ function EventDetailed(props: { event: Event }) {
     if (event.type == 'Card') {
         return (
             <View>
-                <Text>{event.time.elapsed}' <Image source={getImageByEvent(event.type, event.detail)}
+                <Text style={{ fontSize: 16 }}>{event.time.elapsed}' <Image source={getImageByEvent(event.type, event.detail)}
                     style={{
                         width: 15,
                         height: 15,
                         position: 'relative',
-                        justifyContent: "space-between",
+                        justifyContent: "space-between"
                     }}
                 /> - {event.player.name}</Text>
             </View>
@@ -52,7 +52,7 @@ function EventDetailed(props: { event: Event }) {
     else if (event.type == 'Goal') {
         return (
             <View style={styles.container}>
-                <Text>{event.time.elapsed}' - <Image source={getImageByEvent(event.type, event.detail)}
+                <Text style={{ fontSize: 16 }}>{event.time.elapsed}' - <Image source={getImageByEvent(event.type, event.detail)}
                     style={{
                         width: 15,
                         height: 15,
@@ -60,11 +60,10 @@ function EventDetailed(props: { event: Event }) {
                         justifyContent: "space-between",
                     }}
                 /> - {event.player.name}</Text>
-                <View style={styles.assistView}>
                     {event.assist.name ?
                         (
                             <View style={styles.assistView}>
-                                <Text>(</Text>
+                                <Text style={{ fontSize: 16 }}>(</Text>
                                 <Image
                                     source={require(`./images/assist.png`)}
                                     style={{
@@ -74,27 +73,26 @@ function EventDetailed(props: { event: Event }) {
                                         justifyContent: "space-between",
                                     }}
                                 />
-                                <Text>{event.assist.name})</Text>
+                                <Text style={{ fontSize: 16 }}> {event.assist.name})</Text>
                             </View>
                         )
                         : (
                             <View></View>
                         )}
-                </View>
             </View>
         )
     }
     else if (event.type == 'subst') {
         return (
             <View>
-                <Text>{event.time.elapsed}' - <Image source={getImageByEvent(event.type, event.detail)}
+                <Text style={{ fontSize: 16 }}>{event.time.elapsed}' - <Image source={getImageByEvent(event.type, event.detail)}
                     style={{
                         width: 15,
                         height: 15,
                         position: 'relative',
                         justifyContent: "space-between",
                     }}
-                    /> - {event.player.name} for {event.assist.name}</Text>
+                /> - {event.player.name} for {event.assist.name}</Text>
             </View>
         )
     }
@@ -113,9 +111,9 @@ const styles = StyleSheet.create({
     container: {
         display: 'flex',
         flexDirection: 'row',
-        flex: 1
+        
     },
     teamName: {
-        
+
     }
 });

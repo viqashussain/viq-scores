@@ -18,7 +18,7 @@ viq-scores work
 - DONE - carousel colours look awful
 - DONE - tab icons not showing
 - DONE - need to add padding to within the tabs
-- wrap text in starting XI and bench
+- DONE - wrap text in starting XI and bench
 - DONE - add tabs to main screen for favourite teams/leagues
 - DONE - add ability to add teams/leagues to favourites
 - add an about section

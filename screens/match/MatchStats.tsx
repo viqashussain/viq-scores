@@ -10,8 +10,7 @@ import { Fixture } from "../../types/types";
 
 export default function MatchStats(props: { fixture: Fixture }) {
 
-    if (!props.fixture.statistics?.length)
-    {
+    if (!props.fixture.statistics?.length) {
         return <View>
             <Text>Not Available</Text>
         </View>
@@ -23,18 +22,17 @@ export default function MatchStats(props: { fixture: Fixture }) {
     return (
         <View style={styles.container}>
             <List.Item
-            title=''
-            left={x => <Text style={{fontWeight: 'bold'}}>{(props.fixture as Fixture).teams.home.name}</Text>}
-            right={x => <Text style={{fontWeight: 'bold'}}>{(props.fixture as Fixture).teams.away.name}</Text>}
-             />
+                title=''
+                left={x => <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{(props.fixture as Fixture).teams.home.name}</Text>}
+                right={x => <Text style={{ fontWeight: 'bold', fontSize: 16  }}>{(props.fixture as Fixture).teams.away.name}</Text>}
+            />
             {
                 homeStats.map((x, i: number) => {
                     const awayValue = parseInt(awayStats?.find(y => y.type === x.type)!.value ?? '0');
                     const homeValue = parseInt(x.value ?? '0');
                     let totalValue = awayValue + homeValue;
 
-                    if (x.value != null && x.value.toString().indexOf('%') > -1)
-                    {
+                    if (x.value != null && x.value.toString().indexOf('%') > -1) {
                         totalValue = 100;
                     }
 
@@ -47,7 +45,7 @@ export default function MatchStats(props: { fixture: Fixture }) {
                             <List.Item title={''} style={styles.listItem} left={z => {
                                 return (
                                     <View>
-                                        <Text>{homeValue}</Text>
+                                        <Text style={{ fontSize: 16, paddingLeft: 10, fontWeight: 'bold', paddingBottom: 5 }}>{homeValue}</Text>
                                         <ProgressBar style={styles.homeProgressBar} progress={homePercentValue} color={Colors.red800} />
                                     </View>
                                 )
@@ -62,7 +60,7 @@ export default function MatchStats(props: { fixture: Fixture }) {
                                 }}>
 
                             </List.Item>
-{/* 
+                            {/* 
                             <View style={styles.statsTypeContainer} key={i}>
                                 <Text style={styles.statsTypeContainer}>{x.type}</Text>
                             </View>
@@ -105,10 +103,15 @@ const styles = StyleSheet.create({
     statsTypeContainer: {
         textAlign: 'center',
         fontWeight: 'bold',
-        paddingTop: 5
+        paddingTop: 5,
+        fontSize: 16
     },
     awayValue: {
         right: 0,
-        textAlign: 'right'
+        textAlign: 'right',
+        fontSize: 16,
+        fontWeight: 'bold',
+        paddingRight: 10,
+        paddingBottom: 5
     }
 });

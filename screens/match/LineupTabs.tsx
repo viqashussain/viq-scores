@@ -120,7 +120,7 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
                                 <Image style={styles.teamLogo} source={{ uri: route.imageUrl }} />
                             </View>
                         </View>
-                        <Text style={{ color: 'black', fontWeight: 'bold', margin: 8 }}>
+                        <Text style={{ color: 'black', fontWeight: 'bold', margin: 8, fontSize: 16 }}>
                             {route.title}
                         </Text>
                     </View>
