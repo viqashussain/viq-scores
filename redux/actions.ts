@@ -170,21 +170,21 @@ export const getFixtureDetails = (id: number | null) => {
       //   return;
       // }
 
-      const res = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/fixtures?id=${id}`, rapidApiHeaders);
+      // const res = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/fixtures?id=${id}`, rapidApiHeaders);
 
-      if (res.data) {
-        dispatch({
-          type: GET_FIXTURE_DETAILS,
-          payload: res.data.response[0]
-        });
-      } else {
-        console.log('Unable to fetch');
-      }
+      // if (res.data) {
+      //   dispatch({
+      //     type: GET_FIXTURE_DETAILS,
+      //     payload: res.data.response[0]
+      //   });
+      // } else {
+      //   console.log('Unable to fetch');
+      // }
 
-      // dispatch({
-      //   type: GET_FIXTURE_DETAILS,
-      //   payload: fixtureWithScoredPen.response[0]
-      // });
+      dispatch({
+        type: GET_FIXTURE_DETAILS,
+        payload: fixtureWithScoredPen.response[0]
+      });
     };
     // eslint-disable-next-line no-unreachable
   } catch (error) {

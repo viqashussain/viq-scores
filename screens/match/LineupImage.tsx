@@ -29,7 +29,7 @@ export default function LineupImage(props: { fixture: Fixture }) {
     const away = {
         name: awayLinup!.team.name,
         module: awayLinup!.formation,
-        team: getLineupArray(awayLinup, true),
+        team: getLineupArray(awayLinup, true).reverse(),
         away_team_events: getTeamEventsArray(props.fixture, false)
     };
 

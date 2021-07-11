@@ -177,7 +177,7 @@ export default class FootballField extends Component {
                 backgroundColor: 'rgba(43, 99, 204, 0)',
                 paddingTop: 55,
               }}>
-              {this.state.away.team.reverse().map((data, i) => (
+              {this.state.away.team.map((data, i) => (
                 <View key={'a' + i} style={styles.rowAway}>
                   {data.map((d, j) => (
                     <View key={'ae' + j} style={styles.el}>
