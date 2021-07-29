@@ -34,3 +34,6 @@ viq-scores work
 - colour the match stat bars depending on which team is doing better
 - DONE - bug - loading the lineups image initially has the away team reversed.
 - DONE - pen goals not showing line lineups
+- create website for app
+- add search functionality by team or league
+- add message if there are not fixtures/no favs

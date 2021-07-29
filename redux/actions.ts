@@ -33,7 +33,10 @@ export const GET_FIXTURE_DETAILS = 'GET_FIXTURE_DETAILS';
 export const GET_LEAGUE_STANDINGS = 'GET_LEAGUE_STANDINGS';
 
 const rapidApiHeaders = {
-
+  headers: {
+    'x-rapidapi-key': '8cdff61333mshda0c85114bfdbdep18ff1ejsn7e52e5f6effe',
+    'x-rapidapi-host': 'api-football-v1.p.rapidapi.com'
+  }
 }
 
 const getLeagueSeasonYear = async (leagueId: number) => {

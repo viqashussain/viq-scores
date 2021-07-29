@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Text, View } from '../components/Themed';
 import { getFixturesForDate, getTodaysFixtures, SET_FAVOURITE_TEAMS } from '../redux/actions';
-import { Button, List } from 'react-native-paper';
+import { Button, List, Searchbar } from 'react-native-paper';
 import NotStartedFixture from './fixtures/NotStartedFixture';
 import LiveFixture from './fixtures/LiveFixture';
 import moment, { Moment } from 'moment';
@@ -38,6 +38,7 @@ export default function TabOneScreen(props: any) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [fixtures, setFixtures] = useState<Fixture[][]>([]);
   const [filteredFixtures, setFilteredFixtures] = useState<Fixture[][]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [favouriteCompetitions, setFavouriteCompetitions] = useState<{ id: number }[] | null>(null);
   // const [favouriteTeams, setFavouriteTeams] = useState<{ id: number }[]>([]);
 
@@ -77,15 +78,13 @@ export default function TabOneScreen(props: any) {
   }, []);
 
   useEffect(() => {
-    if (favouriteCompetitions != null && competitionTypeSelected == 'favourite-competitions')
-    {
+    if (favouriteCompetitions != null && competitionTypeSelected == 'favourite-competitions') {
       setFilteredFixtures(getFavouriteCompetitionFixtures());
     }
   }, [favouriteCompetitions, competitionTypeSelected, fixtures]);
 
   useEffect(() => {
-    if (favouriteTeams != null && competitionTypeSelected == 'favourite-teams')
-    {
+    if (favouriteTeams != null && competitionTypeSelected == 'favourite-teams') {
       setFilteredFixtures(getFavouriteTeamFixtures());
     }
   }, [favouriteTeams, competitionTypeSelected, fixtures]);
@@ -183,16 +182,21 @@ export default function TabOneScreen(props: any) {
 
   const allCompetitionsTypeSelected = () => {
     setCompetitionTypeSelected('all');
-    setFilteredFixtures(fixtures);
+
+    if (searchQuery) {
+      const filteredFixtures = filterFixturesBySearchQuery(fixtures);
+      setFilteredFixtures(filteredFixtures);
+    }
+    else {
+      setFilteredFixtures(fixtures);
+    }
   }
 
-  const getCompetitionTypeFromStorage = async () =>
-  {
+  const getCompetitionTypeFromStorage = async () => {
     const t: 'all' | 'favourite-competitions' | 'favourite-teams' = await getDataFromStorage(storageKeys.favouritesSelectedFilter);
     setCompetitionTypeSelected(t);
 
-    if (t == 'all')
-    {
+    if (t == 'all') {
       setFilteredFixtures(fixtures);
     }
   }
@@ -212,12 +216,12 @@ export default function TabOneScreen(props: any) {
   }
 
   const getFavouriteCompetitionFixtures = () => {
+    console.log(searchQuery)
     const favouriteLeagueIds = favouriteCompetitions!.map(x => x.id);
-    if (!favouriteLeagueIds.length)
-    {
+    if (!favouriteLeagueIds.length) {
       return [[]];
     }
-    return fixtures
+    let favouriteFixtures = fixtures
       .filter(fixturesGroup => {
         return (fixturesGroup.some(f => {
           return favouriteLeagueIds.includes(f.league.id)
@@ -229,13 +233,39 @@ export default function TabOneScreen(props: any) {
         });
       });
 
+    if (searchQuery) {
+      favouriteFixtures = filterFixturesBySearchQuery(favouriteCompetitions);
+    }
+
+    return favouriteFixtures;
+  }
+
+  useEffect(() => {
+    if (!searchQuery) {
+      if (competitionTypeSelected == 'all') {
+        setFilteredFixtures(fixtures);
+      }
+      else if (competitionTypeSelected == 'favourite-competitions') {
+        setFilteredFixtures(getFavouriteCompetitionFixtures());
+      }
+      else if (competitionTypeSelected == 'favourite-teams') {
+        setFilteredFixtures(getFavouriteTeamFixtures());
+      }
+    }
+    else {
+      const queryFilteredFixtures = filterFixturesBySearchQuery(filteredFixtures);
+      setFilteredFixtures(queryFilteredFixtures);
+    }
+  }, [searchQuery]);
+
+  const onChangeSearch = (query: string) => {
+    setSearchQuery(query);
   }
 
   const getFavouriteTeamFixtures = () => {
     const favouriteTeamIds = favouriteTeams.map(x => x.id);
-    if (!favouriteTeamIds.length)
-    {
-      return [[]]; 
+    if (!favouriteTeamIds.length) {
+      return [[]];
     }
     let arrayToReturn: Fixture[][] = [];
     fixtures
@@ -250,7 +280,22 @@ export default function TabOneScreen(props: any) {
           arrayToReturn.push(currentArray);
         }
       });
+
+    if (searchQuery) {
+      arrayToReturn = filterFixturesBySearchQuery(arrayToReturn);
+    }
+
     return arrayToReturn;
+  }
+
+  const filterFixturesBySearchQuery = (fixturesToFilter: Fixture[][]): Fixture[][] => {
+    return fixturesToFilter.filter(x => {
+      return x.some(y => {
+        const lowerCaseQuery = searchQuery.toLowerCase();
+        return y.teams.away.name.toLowerCase().includes(lowerCaseQuery) || y.teams.home.name.toLowerCase().includes(lowerCaseQuery)
+          || y.league.name.toLowerCase().includes(lowerCaseQuery);
+      })
+    })
   }
 
   const dateCalendarItem = ({ item, index }) => {
@@ -344,10 +389,17 @@ export default function TabOneScreen(props: any) {
                   <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
 
                   <View style={styles.favouriteCompetitionsButtonContainer}>
-                    <Button style={competitionTypeSelected == 'all' ? styles.filterButtonSelected : null} uppercase={false} color={CUSTOM_COLORS.safetyYellow} mode="contained" onPress={() => {allCompetitionsTypeSelected(); competitionTypeUpdated('all');}}>All</Button>
-                    <Button style={competitionTypeSelected == 'favourite-competitions' ? styles.filterButtonSelected : null} uppercase={false} color={CUSTOM_COLORS.safetyYellow} icon="star" mode="contained" onPress={() => {favouriteCompetitionsTypeSelected(); competitionTypeUpdated('favourite-competitions')}}>Competitions</Button>
-                    <Button style={competitionTypeSelected == 'favourite-teams' ? styles.filterButtonSelected : null} uppercase={false} color={CUSTOM_COLORS.safetyYellow} icon="star" mode="contained" onPress={() => {favouriteTeamsTypeSelected(); competitionTypeUpdated('favourite-teams');}}>Teams</Button>
+                    <Button style={competitionTypeSelected == 'all' ? styles.filterButtonSelected : null} uppercase={false} color={CUSTOM_COLORS.safetyYellow} mode="contained" onPress={() => { allCompetitionsTypeSelected(); competitionTypeUpdated('all'); }}>All</Button>
+                    <Button style={competitionTypeSelected == 'favourite-competitions' ? styles.filterButtonSelected : null} uppercase={false} color={CUSTOM_COLORS.safetyYellow} icon="star" mode="contained" onPress={() => { favouriteCompetitionsTypeSelected(); competitionTypeUpdated('favourite-competitions') }}>Competitions</Button>
+                    <Button style={competitionTypeSelected == 'favourite-teams' ? styles.filterButtonSelected : null} uppercase={false} color={CUSTOM_COLORS.safetyYellow} icon="star" mode="contained" onPress={() => { favouriteTeamsTypeSelected(); competitionTypeUpdated('favourite-teams'); }}>Teams</Button>
                   </View>
+
+                  <Searchbar
+                    placeholder="Search"
+                    onChangeText={onChangeSearch}
+                    value={searchQuery}
+                    style={styles.searchBar}
+                  />
 
                   <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
 
@@ -536,5 +588,10 @@ const styles = StyleSheet.create({
   },
   filterButtonSelected: {
     backgroundColor: CUSTOM_COLORS.acidGreen
+  },
+  searchBar: {
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 20
   }
 });
