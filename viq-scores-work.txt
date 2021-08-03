@@ -21,7 +21,7 @@ viq-scores work
 - DONE - wrap text in starting XI and bench
 - DONE - add tabs to main screen for favourite teams/leagues
 - DONE - add ability to add teams/leagues to favourites
-- add an about section
+- DONE - add an about section
 - DONE - background colour of fixtures
 - DONE - auto select fixture filter upon loading
 - DONE - add tabs for the lineup, with each team in a tab
@@ -31,9 +31,8 @@ viq-scores work
 - DONE - implement all available events for icons, including VAR!
 - DONE - assist not showing up correctly
 - DONE - show who the captain is in the lineup and the starting XI
-- colour the match stat bars depending on which team is doing better
 - DONE - bug - loading the lineups image initially has the away team reversed.
 - DONE - pen goals not showing line lineups
 - create website for app
-- add search functionality by team or league
+- DONE add search functionality by team or league
 - add message if there are not fixtures/no favs
