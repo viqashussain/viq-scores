@@ -166,6 +166,10 @@ export default function TabOneScreen(props: any) {
       if (x != null) {
         setFavouriteCompetitions(x);
       }
+      else
+      {
+        setFavouriteCompetitions([]);
+      }
     });
   }
 
@@ -217,7 +221,10 @@ export default function TabOneScreen(props: any) {
 
   const getFavouriteCompetitionFixtures = () => {
     console.log(searchQuery)
-    const favouriteLeagueIds = favouriteCompetitions!.map(x => x.id);
+    if (!favouriteCompetitions) {
+      return [[]];
+    }
+    const favouriteLeagueIds = favouriteCompetitions.map(x => x.id);
     if (!favouriteLeagueIds.length) {
       return [[]];
     }
@@ -412,6 +419,7 @@ export default function TabOneScreen(props: any) {
                       return <View style={{ display: 'flex', flexDirection: 'row' }}>
 
                         {
+                          x?.length ?
                           favouriteCompetitions?.findIndex(y => y.id === x[0].league.id) != -1 ?
                             <TouchableOpacity style={styles.touchableIcon} onPress={() => removeCompetitionFromFavourites(x[0].league.id)}>
                               <Icon name="star" size={20} color={CUSTOM_COLORS.safetyYellow} />
@@ -420,8 +428,11 @@ export default function TabOneScreen(props: any) {
                             <TouchableOpacity style={styles.touchableIcon} onPress={() => addCompetitionToFavourites(x[0].league.id)}>
                               <Icon name="star-o" size={20} color={CUSTOM_COLORS.safetyYellow} />
                             </TouchableOpacity>
+                            : null
                         }
 
+                        <>
+                        { x?.length ?
                         <List.Section style={styles.listSection} key={i}>
                           <List.Accordion
                             style={{ backgroundColor: CUSTOM_COLORS.lightSafetyYellow }}
@@ -454,10 +465,17 @@ export default function TabOneScreen(props: any) {
                               }
                             })}
                           </List.Accordion>
-
+                          
 
                         </List.Section>
-
+                        : 
+                        <>
+                            <Text style={{ fontSize: 20, padding: 20 }}>No fixtures available.</Text>
+                            </> 
+                        }
+                        </>
+<>
+                        { x?.length ?
                         <View>
                           <TouchableOpacity style={{ display: 'flex' }} onPress={() => goToStandings(x[0].league.id)}>
                             {/* <FontAwesomeIcon style={{ height: 20 }} icon={faTable} /> */}
@@ -466,7 +484,11 @@ export default function TabOneScreen(props: any) {
                             </Button>
                           </TouchableOpacity>
                         </View>
+                        : null 
+                      }
+                      </>
                       </View>
+                      
                     })}
 
                   </View>

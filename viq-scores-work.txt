@@ -36,3 +36,5 @@ viq-scores work
 - create website for app
 - DONE add search functionality by team or league
 - add message if there are not fixtures/no favs
+- Bug: searching, then deleting then typing doesn't work correctly.
+- going back to "All" competitions takes way too long?
