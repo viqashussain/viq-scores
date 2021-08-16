@@ -296,7 +296,7 @@ export default function TabOneScreen(props: any) {
   }
 
   const filterFixturesBySearchQuery = (fixturesToFilter: Fixture[][]): Fixture[][] => {
-    return fixturesToFilter.filter(x => {
+    return fixtures.filter(x => {
       return x.some(y => {
         const lowerCaseQuery = searchQuery.toLowerCase();
         return y.teams.away.name.toLowerCase().includes(lowerCaseQuery) || y.teams.home.name.toLowerCase().includes(lowerCaseQuery)
