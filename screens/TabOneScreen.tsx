@@ -166,10 +166,6 @@ export default function TabOneScreen(props: any) {
       if (x != null) {
         setFavouriteCompetitions(x);
       }
-      else
-      {
-        setFavouriteCompetitions([]);
-      }
     });
   }
 
@@ -220,11 +216,7 @@ export default function TabOneScreen(props: any) {
   }
 
   const getFavouriteCompetitionFixtures = () => {
-    console.log(searchQuery)
-    if (!favouriteCompetitions) {
-      return [[]];
-    }
-    const favouriteLeagueIds = favouriteCompetitions.map(x => x.id);
+    const favouriteLeagueIds = favouriteCompetitions!.map(x => x.id);
     if (!favouriteLeagueIds.length) {
       return [[]];
     }
@@ -296,9 +288,9 @@ export default function TabOneScreen(props: any) {
   }
 
   const filterFixturesBySearchQuery = (fixturesToFilter: Fixture[][]): Fixture[][] => {
-    return fixtures.filter(x => {
+    const lowerCaseQuery = searchQuery.toLowerCase();
+    return fixturesToFilter.filter(x => {
       return x.some(y => {
-        const lowerCaseQuery = searchQuery.toLowerCase();
         return y.teams.away.name.toLowerCase().includes(lowerCaseQuery) || y.teams.home.name.toLowerCase().includes(lowerCaseQuery)
           || y.league.name.toLowerCase().includes(lowerCaseQuery);
       })
@@ -431,7 +423,7 @@ export default function TabOneScreen(props: any) {
                             : null
                         }
 
-                        <>
+<>
                         { x?.length ?
                         <List.Section style={styles.listSection} key={i}>
                           <List.Accordion
@@ -465,7 +457,7 @@ export default function TabOneScreen(props: any) {
                               }
                             })}
                           </List.Accordion>
-                          
+
 
                         </List.Section>
                         : 
