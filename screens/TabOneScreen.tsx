@@ -39,7 +39,7 @@ export default function TabOneScreen(props: any) {
   const [fixtures, setFixtures] = useState<Fixture[][]>([]);
   const [filteredFixtures, setFilteredFixtures] = useState<Fixture[][]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [favouriteCompetitions, setFavouriteCompetitions] = useState<{ id: number }[] | null>(null);
+  const [favouriteCompetitions, setFavouriteCompetitions] = useState<{ id: number }[]>([]);
   // const [favouriteTeams, setFavouriteTeams] = useState<{ id: number }[]>([]);
 
   const [refreshing, setRefreshing] = useState(false);
@@ -86,6 +86,12 @@ export default function TabOneScreen(props: any) {
   useEffect(() => {
     if (favouriteTeams != null && competitionTypeSelected == 'favourite-teams') {
       setFilteredFixtures(getFavouriteTeamFixtures());
+    }
+  }, [favouriteTeams, competitionTypeSelected, fixtures]);
+
+  useEffect(() => {
+    if (competitionTypeSelected == 'all') {
+      setFilteredFixtures(fixtures);
     }
   }, [favouriteTeams, competitionTypeSelected, fixtures]);
 
@@ -166,6 +172,9 @@ export default function TabOneScreen(props: any) {
       if (x != null) {
         setFavouriteCompetitions(x);
       }
+      else {
+        setFavouriteCompetitions([]);
+      }
     });
   }
 
@@ -216,7 +225,7 @@ export default function TabOneScreen(props: any) {
   }
 
   const getFavouriteCompetitionFixtures = () => {
-    const favouriteLeagueIds = favouriteCompetitions!.map(x => x.id);
+    const favouriteLeagueIds = favouriteCompetitions.map(x => x.id);
     if (!favouriteLeagueIds.length) {
       return [[]];
     }
@@ -404,83 +413,83 @@ export default function TabOneScreen(props: any) {
 
                   <View>
 
-                    {filteredFixtures.map((x: Fixture[], i: number) => {
+                    {filteredFixtures.map((fixture: Fixture[], i: number) => {
                       // if (i > 0) {
                       //   return;
                       // }
                       return <View style={{ display: 'flex', flexDirection: 'row' }}>
 
                         {
-                          x?.length ?
-                          favouriteCompetitions?.findIndex(y => y.id === x[0].league.id) != -1 ?
-                            <TouchableOpacity style={styles.touchableIcon} onPress={() => removeCompetitionFromFavourites(x[0].league.id)}>
-                              <Icon name="star" size={20} color={CUSTOM_COLORS.safetyYellow} />
-                            </TouchableOpacity>
-                            :
-                            <TouchableOpacity style={styles.touchableIcon} onPress={() => addCompetitionToFavourites(x[0].league.id)}>
-                              <Icon name="star-o" size={20} color={CUSTOM_COLORS.safetyYellow} />
-                            </TouchableOpacity>
+                          fixture?.length ?
+                            favouriteCompetitions?.findIndex(y => y.id === fixture[0].league.id) != -1 ?
+                              <TouchableOpacity style={styles.touchableIcon} onPress={() => removeCompetitionFromFavourites(fixture[0].league.id)}>
+                                <Icon name="star" size={20} color={CUSTOM_COLORS.safetyYellow} />
+                              </TouchableOpacity>
+                              :
+                              <TouchableOpacity style={styles.touchableIcon} onPress={() => addCompetitionToFavourites(fixture[0].league.id)}>
+                                <Icon name="star-o" size={20} color={CUSTOM_COLORS.safetyYellow} />
+                              </TouchableOpacity>
                             : null
                         }
 
-<>
-                        { x?.length ?
-                        <List.Section style={styles.listSection} key={i}>
-                          <List.Accordion
-                            style={{ backgroundColor: CUSTOM_COLORS.lightSafetyYellow }}
-                            title={x[0].league.name}
-                            left={props => <Image style={styles.leagueLogo} source={{ uri: x[0].league.logo }} />}>
-                            {x.map((match: any, j: number) => {
-                              if (match.fixture.status.short === 'NS') {
-                                return (
-                                  <NotStartedFixture key={match.fixture.id} navigation={props.navigation} match={match} />
-                                )
-                              }
-                              else if (match.fixture.status.short === '1H' || match.fixture.status.short === '2H' || match.fixture.status.short === 'ET' || match.fixture.status.short === 'P' || match.fixture.status.short === 'BT') {
-                                return (
-                                  <LiveFixture key={match.fixture.id} navigation={props.navigation} match={match} />
-                                )
-                              }
-                              else if (match.fixture.status.short === 'HT' || match.fixture.status.short === 'FT'
-                                || match.fixture.status.short === 'AET' || match.fixture.status.short === 'PEN') {
-                                return (
-                                  <FinishedFixture key={match.fixture.id} navigation={props.navigation} match={match} />
-                                )
-                              }
-                              else if (match.fixture.status.short === 'TBD' || match.fixture.status.short === 'SUSP'
-                                || match.fixture.status.short === 'INT' || match.fixture.status.short === 'PST'
-                                || match.fixture.status.short === 'CANC' || match.fixture.status.short === 'ABD'
-                                || match.fixture.status.short === 'AWD' || match.fixture.status.short === 'WO') {
-                                return (
-                                  <MiscFixture key={match.fixture.id} navigation={props.navigation} match={match} />
-                                )
-                              }
-                            })}
-                          </List.Accordion>
-
-
-                        </List.Section>
-                        : 
                         <>
-                            <Text style={{ fontSize: 20, padding: 20 }}>No fixtures available.</Text>
-                            </> 
-                        }
+                          {fixture?.length ?
+                            <List.Section style={styles.listSection} key={i}>
+                              <List.Accordion
+                                style={{ backgroundColor: CUSTOM_COLORS.lightSafetyYellow }}
+                                title={fixture[0].league.name}
+                                left={props => <Image style={styles.leagueLogo} source={{ uri: fixture[0].league.logo }} />}>
+                                {fixture.map((match: any, j: number) => {
+                                  if (match.fixture.status.short === 'NS') {
+                                    return (
+                                      <NotStartedFixture key={match.fixture.id} navigation={props.navigation} match={match} />
+                                    )
+                                  }
+                                  else if (match.fixture.status.short === '1H' || match.fixture.status.short === '2H' || match.fixture.status.short === 'ET' || match.fixture.status.short === 'P' || match.fixture.status.short === 'BT') {
+                                    return (
+                                      <LiveFixture key={match.fixture.id} navigation={props.navigation} match={match} />
+                                    )
+                                  }
+                                  else if (match.fixture.status.short === 'HT' || match.fixture.status.short === 'FT'
+                                    || match.fixture.status.short === 'AET' || match.fixture.status.short === 'PEN') {
+                                    return (
+                                      <FinishedFixture key={match.fixture.id} navigation={props.navigation} match={match} />
+                                    )
+                                  }
+                                  else if (match.fixture.status.short === 'TBD' || match.fixture.status.short === 'SUSP'
+                                    || match.fixture.status.short === 'INT' || match.fixture.status.short === 'PST'
+                                    || match.fixture.status.short === 'CANC' || match.fixture.status.short === 'ABD'
+                                    || match.fixture.status.short === 'AWD' || match.fixture.status.short === 'WO') {
+                                    return (
+                                      <MiscFixture key={match.fixture.id} navigation={props.navigation} match={match} />
+                                    )
+                                  }
+                                })}
+                              </List.Accordion>
+
+
+                            </List.Section>
+                            :
+                            <>
+                              <Text style={{ fontSize: 20, padding: 20 }}>No fixtures available.</Text>
+                            </>
+                          }
                         </>
-<>
-                        { x?.length ?
-                        <View>
-                          <TouchableOpacity style={{ display: 'flex' }} onPress={() => goToStandings(x[0].league.id)}>
-                            {/* <FontAwesomeIcon style={{ height: 20 }} icon={faTable} /> */}
-                            <Button style={{ paddingTop: 10 }}>
-                              <Icon name="table" size={25} color={CUSTOM_COLORS.safetyYellow} />
-                            </Button>
-                          </TouchableOpacity>
-                        </View>
-                        : null 
-                      }
-                      </>
+                        <>
+                          {fixture?.length ?
+                            <View>
+                              <TouchableOpacity style={{ display: 'flex' }} onPress={() => goToStandings(fixture[0].league.id)}>
+                                {/* <FontAwesomeIcon style={{ height: 20 }} icon={faTable} /> */}
+                                <Button style={{ paddingTop: 10 }}>
+                                  <Icon name="table" size={25} color={CUSTOM_COLORS.safetyYellow} />
+                                </Button>
+                              </TouchableOpacity>
+                            </View>
+                            : null
+                          }
+                        </>
                       </View>
-                      
+
                     })}
 
                   </View>

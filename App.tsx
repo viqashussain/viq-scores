@@ -33,7 +33,7 @@ export default function App() {
 
   if (!isLoadingComplete) {
     return (
-      <Text>Loading...</Text>
+      <View></View>
     );
   } else {
     return (

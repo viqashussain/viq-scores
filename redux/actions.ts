@@ -195,7 +195,7 @@ export const getFixtureDetails = (id: number | null) => {
 function getActionBasedOnDate(date: Moment) {
   const dateWithoutTime = date.startOf('d');
   const todaysDate = moment().startOf('d');
-  const dateDayDifference = todaysDate.diff(moment(dateWithoutTime), 'days', true) - 1;
+  const dateDayDifference = moment.duration(dateWithoutTime.diff(todaysDate)).asDays() - 1;
   switch (dateDayDifference) {
     case 0: return GET_TODAYS_FIXTURES
     case -0: return GET_TODAYS_FIXTURES
