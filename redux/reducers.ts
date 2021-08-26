@@ -33,46 +33,46 @@ function fixturesReducer(state = initialState, action: any) {
     console.log('action.type: ' + action.type);
     switch (action.type) {
         case GET_TODAYS_FIXTURES:
-            return { ...state, todaysFixtures: action.payload };
+            return { ...state, todaysFixtures: action.payload.groupedFixtures };
 
         case GET_ONE_DAY_AGO_FIXTURES:
-            return { ...state, oneDayAgoFixtures: action.payload };
+            return { ...state, oneDayAgoFixtures: action.payload.groupedFixtures };
         case GET_TWO_DAYS_AGO_FIXTURES:
-            return { ...state, twoDaysAgoFixtures: action.payload };
+            return { ...state, twoDaysAgoFixtures: action.payload.groupedFixtures };
         case GET_THREE_DAYS_AGO_FIXTURES:
-            return { ...state, threeDaysAgoFixtures: action.payload };
+            return { ...state, threeDaysAgoFixtures: action.payload.groupedFixtures };
         case GET_FOUR_DAYS_AGO_FIXTURES:
-            return { ...state, fourDaysAgoFixtures: action.payload };
+            return { ...state, fourDaysAgoFixtures: action.payload.groupedFixtures };
         case GET_FIVE_DAYS_AGO_FIXTURES:
-            return { ...state, fiveDaysAgoFixtures: action.payload };
+            return { ...state, fiveDaysAgoFixtures: action.payload.groupedFixtures };
         case GET_SIX_DAYS_AGO_FIXTURES:
-            return { ...state, sixDaysAgoFixtures: action.payload };
+            return { ...state, sixDaysAgoFixtures: action.payload.groupedFixtures };
         case GET_SEVEN_DAYS_AGO_FIXTURES:
-            return { ...state, sevenDaysAgoFixtures: action.payload };
+            return { ...state, sevenDaysAgoFixtures: action.payload.groupedFixtures };
 
         case GET_ONE_DAY_FUTURE_FIXTURES:
-            return { ...state, oneDayFutureFixtures: action.payload };
+            return { ...state, oneDayFutureFixtures: action.payload.groupedFixtures };
         case GET_TWO_DAYS_FUTURE_FIXTURES:
-            return { ...state, twoDaysFutureFixtures: action.payload };
+            return { ...state, twoDaysFutureFixtures: action.payload.groupedFixtures };
         case GET_THREE_DAYS_FUTURE_FIXTURES:
-            return { ...state, threeDaysFutureFixtures: action.payload };
+            return { ...state, threeDaysFutureFixtures: action.payload.groupedFixtures };
         case GET_FOUR_DAYS_FUTURE_FIXTURES:
-            return { ...state, fourDaysFutureFixtures: action.payload };
+            return { ...state, fourDaysFutureFixtures: action.payload.groupedFixtures };
         case GET_FIVE_DAYS_FUTURE_FIXTURES:
-            return { ...state, fiveDaysFutureFixtures: action.payload };
+            return { ...state, fiveDaysFutureFixtures: action.payload.groupedFixtures };
         case GET_SIX_DAYS_FUTURE_FIXTURES:
-            return { ...state, sixDaysFutureFixtures: action.payload };
+            return { ...state, sixDaysFutureFixtures: action.payload.groupedFixtures };
         case GET_SEVEN_DAYS_FUTURE_FIXTURES:
-            return { ...state, sevenDaysFutureFixtures: action.payload };
+            return { ...state, sevenDaysFutureFixtures: action.payload.groupedFixtures };
 
         case GET_FIXTURE_DETAILS:
-            return { ...state, fixtureDetails: action.payload };
+            return { ...state, fixtureDetails: action.payload.groupedFixtures };
 
         case GET_LEAGUE_STANDINGS:
-            return { ...state, leagueStandings: action.payload };
+            return { ...state, leagueStandings: action.payload.groupedFixtures };
 
         case SET_FAVOURITE_TEAMS:
-            return { ...state, favouriteTeams: action.payload };
+            return { ...state, favouriteTeams: action.payload.groupedFixtures };
 
         default:
             return state;

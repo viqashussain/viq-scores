@@ -106,11 +106,12 @@ export const getTodaysFixtures = () => {
   try {
     return async (dispatch: any) => {
       const res = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${moment().format('YYYY-MM-DD')}`, rapidApiHeaders);
+      const groupedFixtures = groupFixturesListByLeagueId(res.data.response);
 
       if (res.data) {
         dispatch({
           type: GET_TODAYS_FIXTURES,
-          payload: groupFixturesListByLeagueId(res.data.response),
+          payload: {groupedFixtures}
         });
       } else {
         console.log('Unable to fetch');
@@ -131,11 +132,13 @@ export const getFixturesForDate = (date: Moment) => {
   try {
     return async (dispatch: any) => {
       const res = await axios.get(`https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${moment(date).format('YYYY-MM-DD')}`, rapidApiHeaders);
+      const groupedFixtures = groupFixturesListByLeagueId(res.data.response);
+      const action = getActionBasedOnDate(date);
 
       if (res.data) {
         dispatch({
-          type: getActionBasedOnDate(date),
-          payload: groupFixturesListByLeagueId(res.data.response),
+          type: action,
+          payload: {groupedFixtures},
         });
       } else {
         console.log('Unable to fetch');
