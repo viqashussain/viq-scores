@@ -81,19 +81,26 @@ export default function TabOneScreen(props: any) {
     if (favouriteCompetitions != null && competitionTypeSelected == 'favourite-competitions') {
       setFilteredFixtures(getFavouriteCompetitionFixtures());
     }
-  }, [favouriteCompetitions, competitionTypeSelected, fixtures]);
-
-  useEffect(() => {
-    if (favouriteTeams != null && competitionTypeSelected == 'favourite-teams') {
+    else if (favouriteTeams != null && competitionTypeSelected == 'favourite-teams') {
       setFilteredFixtures(getFavouriteTeamFixtures());
     }
-  }, [favouriteTeams, competitionTypeSelected, fixtures]);
-
-  useEffect(() => {
-    if (competitionTypeSelected == 'all') {
+    else
+    {
       setFilteredFixtures(fixtures);
     }
-  }, [favouriteTeams, competitionTypeSelected, fixtures]);
+  }, [favouriteCompetitions, competitionTypeSelected, fixtures]);
+
+  // useEffect(() => {
+  //   if (favouriteTeams != null && competitionTypeSelected == 'favourite-teams') {
+  //     setFilteredFixtures(getFavouriteTeamFixtures());
+  //   }
+  // }, [favouriteTeams, competitionTypeSelected, fixtures]);
+
+  // useEffect(() => {
+  //   if (competitionTypeSelected == 'all') {
+  //     setFilteredFixtures(fixtures);
+  //   }
+  // }, [favouriteTeams, competitionTypeSelected, fixtures]);
 
   useEffect(() => {
     setFixtures(todaysFixtures);
@@ -123,15 +130,24 @@ export default function TabOneScreen(props: any) {
 
   const handlePress = () => setExpanded(!expanded);
 
-  const dateSelected = async (date: Date) => {
-    setIsLoaded(false);
-    setSelectedDate(date.toString());
+  // const dateSelected = async (date: Date) => {
+  //   setIsLoaded(false);
+  //   setSelectedDate(date.toString());
 
-    await fetchFixturesForDate(date);
-    setIsLoaded(true);
-  }
+  //   await fetchFixturesForDate(date);
+  //   setIsLoaded(true);
+  // }
+
+  // this is needed else onSnapToItem in the carousel will also be called by clicking on a date
+  let dateHasBeenPressed = false;
 
   const dateSelectedNew = async (index: number) => {
+    if (dateHasBeenPressed)
+    {
+      dateHasBeenPressed = false;
+      return;
+    }
+    setFixtures([]);
     setIsLoaded(false);
     setSelectedDate(carouselItems[index].toString());
     await fetchFixturesForDate(moment(carouselItems[index].toString()));
@@ -139,6 +155,7 @@ export default function TabOneScreen(props: any) {
   }
 
   const datePressed = async (index: number) => {
+    dateHasBeenPressed = true;
     (carouselRef.current as any).snapToItem(index);
     await dateSelectedNew(index);
   }

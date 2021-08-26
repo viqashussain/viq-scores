@@ -38,3 +38,6 @@ viq-scores work
 - add message if there are not fixtures/no favs
 - Bug: searching, then deleting then typing doesn't work correctly.
 - going back to "All" competitions takes way too long?
+- BUG: clicking on a date makes it go and retrieve fixtures twice!
+- BUG: can't scroll to bottom of lineups in android
+- BUG: search not working properly on android
