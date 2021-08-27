@@ -37,6 +37,8 @@ export default function TabOneScreen(props: any) {
   const [competitionTypeSelected, setCompetitionTypeSelected] = useState<'all' | 'favourite-competitions' | 'favourite-teams'>('all');
   const [isLoaded, setIsLoaded] = useState(false);
   const [fixtures, setFixtures] = useState<Fixture[][]>([]);
+  const [allFavouriteCompetitionFixtures, setAllFavouriteCompetitionFixtures] = useState<Fixture[][]>([]);
+  const [allFavouriteTeamFixtures, setAllFavouriteTeamFixtures] = useState<Fixture[][]>([]);
   const [filteredFixtures, setFilteredFixtures] = useState<Fixture[][]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [favouriteCompetitions, setFavouriteCompetitions] = useState<{ id: number }[]>([]);
@@ -258,6 +260,8 @@ export default function TabOneScreen(props: any) {
         });
       });
 
+      setAllFavouriteCompetitionFixtures(favouriteFixtures);
+
     if (searchQuery) {
       favouriteFixtures = filterFixturesBySearchQuery(favouriteCompetitions);
     }
@@ -278,8 +282,18 @@ export default function TabOneScreen(props: any) {
       }
     }
     else {
-      const queryFilteredFixtures = filterFixturesBySearchQuery(filteredFixtures);
-      setFilteredFixtures(queryFilteredFixtures);
+      if (competitionTypeSelected == 'all') {
+        const queryFilteredFixtures = filterFixturesBySearchQuery(fixtures);
+        setFilteredFixtures(queryFilteredFixtures);
+      }
+      else if (competitionTypeSelected == 'favourite-competitions') {
+        const queryFilteredFixtures = filterFixturesBySearchQuery(allFavouriteCompetitionFixtures);
+        setFilteredFixtures(queryFilteredFixtures);
+      }
+      else if (competitionTypeSelected == 'favourite-teams') {
+        const queryFilteredFixtures = filterFixturesBySearchQuery(allFavouriteTeamFixtures);
+        setFilteredFixtures(queryFilteredFixtures);
+      }
     }
   }, [searchQuery]);
 
@@ -305,6 +319,8 @@ export default function TabOneScreen(props: any) {
           arrayToReturn.push(currentArray);
         }
       });
+
+      setAllFavouriteTeamFixtures(arrayToReturn);
 
     if (searchQuery) {
       arrayToReturn = filterFixturesBySearchQuery(arrayToReturn);

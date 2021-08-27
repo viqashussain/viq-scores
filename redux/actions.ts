@@ -111,7 +111,7 @@ export const getTodaysFixtures = () => {
       if (res.data) {
         dispatch({
           type: GET_TODAYS_FIXTURES,
-          payload: {groupedFixtures}
+          payload: groupedFixtures
         });
       } else {
         console.log('Unable to fetch');
@@ -138,7 +138,7 @@ export const getFixturesForDate = (date: Moment) => {
       if (res.data) {
         dispatch({
           type: action,
-          payload: {groupedFixtures},
+          payload: groupedFixtures,
         });
       } else {
         console.log('Unable to fetch');
