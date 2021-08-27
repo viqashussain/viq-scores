@@ -36,8 +36,10 @@ viq-scores work
 - create website for app
 - DONE add search functionality by team or league
 - DONE - add message if there are not fixtures/no favs
-- Bug: searching, then deleting then typing doesn't work correctly.
-- going back to "All" competitions takes way too long?
+- DONE - Bug: searching, then deleting then typing doesn't work correctly.
+- going back to "All" competitions takes way too long - only on Android
 - BUG: clicking on a date makes it go and retrieve fixtures twice!
 - BUG: can't scroll to bottom of lineups in android
 - BUG: search not working properly on android
+- BUG: refreshing brings back the wrong fixtures
+- BUG: back Scores button does not work
