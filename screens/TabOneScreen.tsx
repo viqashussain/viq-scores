@@ -1,6 +1,6 @@
 import Reactotron from 'reactotron-react-native'
 import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Image, SafeAreaView, ScrollView, RefreshControl, Dimensions, TouchableOpacity, Vibration } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -63,12 +63,12 @@ export default function TabOneScreen(props: any) {
     moment().add(7, 'd').startOf('day'),
   ]);
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = () => {
     setRefreshing(true);
     fetchFixturesForDate(moment(selectedDate)).then(x => {
       setRefreshing(false);
     });
-  }, []);
+  };
 
   // get fixtures for today on load
   // initialise
@@ -151,7 +151,7 @@ export default function TabOneScreen(props: any) {
     }
     setFixtures([]);
     setIsLoaded(false);
-    setSelectedDate(carouselItems[index].toString());
+    setSelectedDate(moment(carouselItems[index].toString()).format('YYYY-MM-DD'));
     await fetchFixturesForDate(moment(carouselItems[index].toString()));
     setIsLoaded(true);
   }
