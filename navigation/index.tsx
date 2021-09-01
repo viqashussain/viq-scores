@@ -50,16 +50,6 @@ function RootNavigator() {
 const HomeStack = createStackNavigator();
 
 function HomeStackScreen() {
-  return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen name="Scores" component={TabOneScreen} options={{ headerTitle: props => <LogoTitle title="Fixtures" /> }} />
-      <HomeStack.Screen name="Match" component={Match} options={{ headerTitle: props => <LogoTitle title="Match" /> }} />
-      <HomeStack.Screen name="Standings" component={Standings} options={{ headerTitle: props => <LogoTitle title="Standings" /> }} />
-    </HomeStack.Navigator>
-  );
-}
-
-function LogoTitle(props: { title: string }) {
   const infoIconPressed = () => {
     setVisible(true);
   }
@@ -69,41 +59,16 @@ function LogoTitle(props: { title: string }) {
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
-  const containerStyle = {backgroundColor: 'white', padding: 20};
-
 
   return (
-    <View style={{
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      flexWrap: "wrap",
-      width: Dimensions.get('window').width,
-    }}>
-      <View></View>
-      <List.Item title={props.title}
-        titleStyle={{
-          paddingLeft: 20,
-          textAlign: 'center'
-        }}
-        style={{
-        }}
-        left={() => <Image
-          style={{
-            width: 50,
-            height: 50,
-            marginLeft: 20
-          }}
-          source={require('../assets/logo/logo_small.png')}
-        />}
-      />
-      <TouchableOpacity onPress={() => showModal()}>
+    <HomeStack.Navigator>
+      <HomeStack.Screen name="Scores" component={TabOneScreen} options={{ headerTitle: props => <LogoTitle title="Fixtures" />, headerRight: props => <TouchableOpacity onPress={() => showModal()}>
         <Icon style={{
           paddingTop: 15,
-          marginRight: 20
+          marginRight: 20,
+          flex: 1
         }} name="info" size={25} color={CUSTOM_COLORS.safetyYellow} />
-      </TouchableOpacity>
-      
-      <Modal
+        <Modal
         animationType="slide"
         transparent={true}
         visible={visible}
@@ -125,6 +90,33 @@ function LogoTitle(props: { title: string }) {
           </View>
         </View>
       </Modal>
+      </TouchableOpacity>}} />
+      <HomeStack.Screen name="Match" component={Match} options={{ headerTitle: props => <LogoTitle title="Match" /> }} />
+      <HomeStack.Screen name="Standings" component={Standings} options={{ headerTitle: props => <LogoTitle title="Standings" /> }} />
+    </HomeStack.Navigator>
+  );
+}
+
+function LogoTitle(props: { title: string }) {
+
+  return (
+    <View>
+      <View
+      style={{
+        backgroundColor: 'red',
+        height: 0,
+        width: 0,
+        flex: 1,
+        zIndex: -9999
+      }}></View>
+      <Image
+          style={{
+            width: 50,
+            height: 50,
+            resizeMode: 'contain',
+          }}
+          source={require('../assets/logo/logo_small.png')}
+        />
     </View>
   );
 }
