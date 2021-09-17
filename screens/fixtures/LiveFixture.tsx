@@ -15,7 +15,7 @@ export default function LiveFixture(props: { match: Fixture, navigation: any }) 
     }
 
     return (
-        <TouchableHighlight onPress={() => matchSelected(props.match)}>
+        <TouchableHighlight onPressIn={() => matchSelected(props.match)}>
             <View style={styles.container}>
                 <View style={styles.teamsContainer}>
                     <FixtureLinearGradient />

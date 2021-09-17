@@ -48,12 +48,15 @@ function getLineupArray(lineup: any, isAwayTeam = false)
  
     lineupToReturn.push([lineup.startXI[0].player]);
 
-    formation.split('-').forEach((x: any) => {
-        const players = lineup.startXI.slice(currentPlayerInLineup, parseInt(x) + currentPlayerInLineup);
-        lineupToReturn.push(players.map((y: any) => y.player));
-
-        currentPlayerInLineup += parseInt(x);
-    });
+    if (formation)
+    {
+        formation.split('-').forEach((x: any) => {
+            const players = lineup.startXI.slice(currentPlayerInLineup, parseInt(x) + currentPlayerInLineup);
+            lineupToReturn.push(players.map((y: any) => y.player));
+    
+            currentPlayerInLineup += parseInt(x);
+        });
+    }
 
     return lineupToReturn;
 }

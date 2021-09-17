@@ -57,15 +57,19 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
                         <Title >Starting XI</Title>
 
                         {
+                            props.fixtureDetails.lineups[0] ?
                             props.fixtureDetails.lineups[0].startXI.map((x, i: number) => (
                                 <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />
                             ))
+                            : null
                         }
 
                         <Title>Bench</Title>
 
                         {
+                            props.fixtureDetails.lineups[0] ?
                             props.fixtureDetails.lineups[0].substitutes.map((x, i: number) => <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />)
+                            : null
                         }
 
                         <Title>Coach</Title>
@@ -75,8 +79,8 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
                             left={y => {
                                 return (
                                     <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                        <Image style={styles.playerImage} source={{ uri: props.fixtureDetails.lineups[0].coach.photo }} />
-                                        <Text style={{ fontSize: 16, paddingLeft: 10 }}>{props.fixtureDetails.lineups[0].coach.name}</Text>
+                                        <Image style={styles.playerImage} source={{ uri: props.fixtureDetails.lineups[0] ? props.fixtureDetails.lineups[0].coach.photo: null }} />
+                                        <Text style={{ fontSize: 16, paddingLeft: 10 }}>{props.fixtureDetails.lineups[0] ? props.fixtureDetails.lineups[0].coach.name : null}</Text>
                                     </View>
                                 )
                             }}>
@@ -90,13 +94,17 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
                         <Title >Starting XI</Title>
 
                         {
+                            props.fixtureDetails.lineups[1] ?
                             props.fixtureDetails.lineups[1].startXI.map((x, i: number) => <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />)
+                            : null
                         }
 
                         <Title>Bench</Title>
 
                         {
+                            props.fixtureDetails.lineups[1] ?
                             props.fixtureDetails.lineups[1].substitutes.map((x, i: number) => <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />)
+                            : null
                         }
 
                         <Title>Coach</Title>
@@ -106,8 +114,8 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
                             left={y => {
                                 return (
                                     <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                        <Image style={styles.playerImage} source={{ uri: props.fixtureDetails.lineups[1].coach.photo }} />
-                                        <Text style={{ fontSize: 16, paddingLeft: 10 }}>{props.fixtureDetails.lineups[1].coach.name}</Text>
+                                        <Image style={styles.playerImage} source={{ uri: props.fixtureDetails.lineups[1] ? props.fixtureDetails.lineups[1].coach.photo : null }} />
+                                        <Text style={{ fontSize: 16, paddingLeft: 10 }}>{props.fixtureDetails.lineups[1] ? props.fixtureDetails.lineups[1].coach.name : null}</Text>
                                     </View>
                                 )
                             }}>
@@ -121,11 +129,19 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
     };
 
     const getPlayerImageUrl = (playerId: number) => {
+        if (!props.fixtureDetails.players[0])
+        {
+            return null;
+        }
         const allPlayers = props.fixtureDetails.players[0].players.concat(props.fixtureDetails.players[1].players);
         return allPlayers.find(x => x.player.id == playerId)?.player.photo;
     }
 
     const isPlayerCaptain = (playerId: number) => {
+        if (!props.fixtureDetails.players[0])
+        {
+            return null;
+        }
         const allPlayers = props.fixtureDetails.players[0].players.concat(props.fixtureDetails.players[1].players);
         return allPlayers.find(x => x.player.id == playerId)?.statistics[0].games.captain;
     }

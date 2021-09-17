@@ -15,7 +15,7 @@ export default function FinishedFixture(props: { match: Fixture, navigation: any
     }
 
     return (
-        <TouchableHighlight onPress={() => matchSelected(props.match)}>
+        <TouchableHighlight onPressIn={() => matchSelected(props.match)}>
             <View>
                 <View style={styles.container}>
                     <View style={styles.teamsContainer}>
