@@ -7,18 +7,18 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
-import { ColorSchemeName, Dimensions, Image, Modal, TouchableOpacity, View, StyleSheet, Pressable } from 'react-native';
+import { ColorSchemeName, Image, View, StyleSheet, Pressable, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Button, List, Portal, Provider, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import Match from '../screens/match/Match';
 import Standings from '../screens/match/Standings';
 
-import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/TabOneScreen';
 import { RootStackParamList } from '../types';
 import { CUSTOM_COLORS } from '../types/colors';
-import BottomTabNavigator from './BottomTabNavigator';
-import LinkingConfiguration from './LinkingConfiguration';
+import { TouchableHighlight } from 'react-native-gesture-handler';
+import Modal from 'modal-react-native-web';
+
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -50,47 +50,51 @@ function RootNavigator() {
 const HomeStack = createStackNavigator();
 
 function HomeStackScreen() {
-  const infoIconPressed = () => {
-    setVisible(true);
-  }
-  
+  // const infoIconPressed = () => {
+  //   setVisible(true);
+  // }
+
   const [visible, setVisible] = React.useState(false);
 
-  const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
+  const showModal = () => {
+    setVisible(true)
+  };
+  const hideModal = () => setVisible(true);
 
 
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen name="Scores" component={TabOneScreen} options={{ headerTitle: props => <LogoTitle title="Fixtures" />, headerRight: props => <TouchableOpacity onPress={() => showModal()}>
-        <Icon style={{
-          paddingTop: 15,
-          marginRight: 20,
-          flex: 1
-        }} name="info" size={25} color={CUSTOM_COLORS.safetyYellow} />
-        <Modal
-        animationType="slide"
-        transparent={true}
-        visible={visible}
-        onRequestClose={() => {
-          setVisible(!visible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Developed by Viqas Hussain.</Text>
-            <Text style={styles.modalText}>You can contact me at viqashussain@hotmail.co.uk</Text>
-            <Text style={styles.modalText}>viqas.co.uk</Text>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setVisible(!visible)}
-            >
-              <Text style={styles.textStyle}>Close</Text>
-            </Pressable>
+          <Icon style={{
+            paddingTop: 15,
+            marginRight: 20,
+            flex: 1
+          }} name="info" size={25} color={CUSTOM_COLORS.safetyYellow} />
+
+          <View style={{ marginTop: 22 }}>
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={visible}
+              onDismiss={() => {
+                setVisible(!visible);
+              }}>
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <Text style={styles.modalText}>Developed by Viqas Hussain.</Text>
+                  <Text style={styles.modalText}>You can contact me at viqashussain@hotmail.co.uk</Text>
+                  <Text style={styles.modalText}>viqas.co.uk</Text>
+                  <Pressable
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => setVisible(!visible)}
+                  >
+                    <Text style={styles.textStyle}>Close</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </Modal>
           </View>
-        </View>
-      </Modal>
-      </TouchableOpacity>}} />
+          </TouchableOpacity>}} />
       <HomeStack.Screen name="Match" component={Match} options={{ headerTitle: props => <LogoTitle title="Match" /> }} />
       <HomeStack.Screen name="Standings" component={Standings} options={{ headerTitle: props => <LogoTitle title="Standings" /> }} />
     </HomeStack.Navigator>
@@ -102,21 +106,21 @@ function LogoTitle(props: { title: string }) {
   return (
     <View>
       <View
-      style={{
-        backgroundColor: 'red',
-        height: 0,
-        width: 0,
-        flex: 1,
-        zIndex: -9999
-      }}></View>
+        style={{
+          backgroundColor: 'red',
+          height: 0,
+          width: 0,
+          flex: 1,
+          zIndex: -9999
+        }}></View>
       <Image
-          style={{
-            width: 50,
-            height: 50,
-            resizeMode: 'contain',
-          }}
-          source={require('../assets/logo/logo_small.png')}
-        />
+        style={{
+          width: 50,
+          height: 50,
+          resizeMode: 'contain',
+        }}
+        source={require('../assets/logo/logo_small.png')}
+      />
     </View>
   );
 }
@@ -141,7 +145,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
   button: {
     borderRadius: 20,
