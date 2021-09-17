@@ -57,7 +57,7 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
                         <Title >Starting XI</Title>
 
                         {
-                            props.fixtureDetails.lineups[0] ?
+                            props.fixtureDetails.lineups[0].startXI ?
                             props.fixtureDetails.lineups[0].startXI.map((x, i: number) => (
                                 <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />
                             ))
@@ -67,7 +67,7 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
                         <Title>Bench</Title>
 
                         {
-                            props.fixtureDetails.lineups[0] ?
+                            props.fixtureDetails.lineups[0].startXI ?
                             props.fixtureDetails.lineups[0].substitutes.map((x, i: number) => <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />)
                             : null
                         }
@@ -94,7 +94,7 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
                         <Title >Starting XI</Title>
 
                         {
-                            props.fixtureDetails.lineups[1] ?
+                            props.fixtureDetails.lineups[1].startXI ?
                             props.fixtureDetails.lineups[1].startXI.map((x, i: number) => <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />)
                             : null
                         }
@@ -102,7 +102,7 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
                         <Title>Bench</Title>
 
                         {
-                            props.fixtureDetails.lineups[1] ?
+                            props.fixtureDetails.lineups[1].startXI ?
                             props.fixtureDetails.lineups[1].substitutes.map((x, i: number) => <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />)
                             : null
                         }

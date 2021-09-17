@@ -43,8 +43,13 @@ export default function LineupImage(props: { fixture: Fixture }) {
 function getLineupArray(lineup: any, isAwayTeam = false)
 {
     const formation = lineup.formation;
-    let lineupToReturn = [];
+    let lineupToReturn: any[] = [];
     let currentPlayerInLineup = 1;
+
+    if (!lineup.startXI)
+    {
+        return lineupToReturn;
+    }
  
     lineupToReturn.push([lineup.startXI[0].player]);
 
