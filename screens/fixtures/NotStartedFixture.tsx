@@ -61,7 +61,8 @@ const styles = StyleSheet.create({
         width: 80
     },
     matchStatus: {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        zIndex: 999999999
     },
     teamName: {
         paddingLeft: 10,

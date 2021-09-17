@@ -1,7 +1,7 @@
 import Reactotron from 'reactotron-react-native'
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { StyleSheet, Image, SafeAreaView, ScrollView, RefreshControl, Dimensions, TouchableOpacity, Vibration } from 'react-native';
+import { StyleSheet, Image, SafeAreaView, ScrollView, Dimensions, TouchableOpacity, Vibration } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Text, View } from '../components/Themed';
@@ -22,6 +22,8 @@ import { Fixture } from '../types/types';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { getDataFromStorage, storageKeys, storeDataInStorage } from '../storage/storage';
 import * as Haptics from 'expo-haptics';
+import { RefreshControl } from 'react-native-web-refresh-control'
+
 
 export default function TabOneScreen(props: any) {
 
@@ -511,7 +513,7 @@ export default function TabOneScreen(props: any) {
                         <>
                           {fixture?.length ?
                             <View>
-                              <TouchableOpacity style={{ display: 'flex' }} onPress={() => goToStandings(fixture[0].league.id)}>
+                              <TouchableOpacity style={{ display: 'flex' }} onPressIn={() => goToStandings(fixture[0].league.id)}>
                                 {/* <FontAwesomeIcon style={{ height: 20 }} icon={faTable} /> */}
                                 <Button style={{ paddingTop: 10 }}>
                                   <Icon name="table" size={25} color={CUSTOM_COLORS.safetyYellow} />

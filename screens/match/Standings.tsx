@@ -46,7 +46,7 @@ export default function Standings({ route, navigation }) {
         }
     }, [leagueStandings]);
 
-    const { height } = Dimensions.get("screen");
+    const { height, width } = Dimensions.get("screen");
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
@@ -82,7 +82,7 @@ export default function Standings({ route, navigation }) {
                                                 onRefresh={onRefresh}
                                             />}>
                                             <View style={{ flex: 1 }}>
-                                                <DataTable style={{ width: 750 }}>
+                                                <DataTable style={{ width: width }}>
                                                     <DataTable.Header>
                                                         <DataTable.Title>Rank</DataTable.Title>
                                                         <DataTable.Title style={{ flex: 3 }}>Team</DataTable.Title>

@@ -6,7 +6,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "deploy": "expo build:web firebase deploy"
   },
   "jest": {
     "preset": "jest-expo"
@@ -53,6 +54,7 @@
     "react-native-tab-view": "^3.0.1",
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "^0.13.18",
+    "react-native-web-refresh-control": "^1.1.0",
     "react-redux": "^7.2.4",
     "redux": "^4.1.0",
     "redux-thunk": "^2.3.0",
