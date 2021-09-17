@@ -58,7 +58,8 @@ const styles = StyleSheet.create({
     },
     matchStatus: {
         fontWeight: 'bold',
-        textAlign: 'center'
+        textAlign: 'center',
+        zIndex: 99999
     },
     matchStatusContainer: {
         justifyContent: 'center', //Centered vertically

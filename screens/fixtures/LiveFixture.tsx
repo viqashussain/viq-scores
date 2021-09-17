@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     },
     matchMinute: {
         fontStyle: 'italic',
+        zIndex: 9999999
     },
     matchStatusContainer: {
         justifyContent: 'center', //Centered vertically

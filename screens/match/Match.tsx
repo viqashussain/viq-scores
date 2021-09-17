@@ -171,16 +171,24 @@ export default function Match({ route, navigation }) {
         switch (route.key) {
             case 'first':
                 return <View key={'first'} style={{ flex: 1, padding: 20 }}>
-                    {fixtureDetails.events.map((x: any, i: number) => {
+                    {fixtureDetails.events.length ? fixtureDetails.events.map((x: any, i: number) => {
                         return (
                             <Event key={i} event={x} homeTeamId={fixtureDetails.teams.home.id} awayTeamId={fixtureDetails.teams.away.id} />
                         )
-                    })}
+                    })
+                        : <Card><Card.Content><Text>Not available</Text></Card.Content></Card>
+                    }
                 </View>
             case 'second':
                 return <View key={'second'} style={{ flex: 1 }}>
-                    <LineupImage fixture={fixtureDetails} />
-                    <LineupTabs fixtureDetails={fixtureDetails} />
+                    {
+                        fixtureDetails.lineups[1] && fixtureDetails.lineups[1].startXI ?
+                            <>
+                                <LineupImage fixture={fixtureDetails} />
+                                <LineupTabs fixtureDetails={fixtureDetails} />
+                            </>
+                            : <Card><Card.Content><Text>Not available</Text></Card.Content></Card>
+                    }
                 </View>
             case 'third':
                 return <View key={'third'}>

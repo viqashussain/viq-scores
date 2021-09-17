@@ -38,7 +38,7 @@ export default function FinishedFixture(props: { match: Fixture, navigation: any
                 {
                     props.match.fixture.status.short == 'PEN' ?
                         <View style={{ backgroundColor: CUSTOM_COLORS.safetyYellow }}>
-                            <Text style={{ textAlign: 'center', fontWeight: 'bold', paddingTop: 3, paddingBottom: 3 }}>{getPenStatus(props.match)}</Text>
+                            <Text style={{ zIndex: 999999, textAlign: 'center', fontWeight: 'bold', paddingTop: 3, paddingBottom: 3 }}>{getPenStatus(props.match)}</Text>
                         </View>
                         :
                         <View></View>
@@ -72,7 +72,8 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end'
     },
     matchStatus: {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        zIndex: 999999
     },
     matchStatusContainer: {
         justifyContent: 'center', //Centered vertically
