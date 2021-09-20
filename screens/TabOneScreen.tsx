@@ -426,7 +426,7 @@ export default function TabOneScreen(props: any) {
 
 
                   <View style={styles.dateContainer}>
-                    <Text style={styles.title}>{moment(selectedDate).format('LL')} Fixtures</Text>
+                    <Text style={styles.title}>{moment(selectedDate).format('dddd Do MMMM')} Fixtures</Text>
                   </View>
 
                   <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
