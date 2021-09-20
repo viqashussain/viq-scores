@@ -1,7 +1,7 @@
 import Reactotron from 'reactotron-react-native'
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { StyleSheet, Image, SafeAreaView, ScrollView, Dimensions, TouchableOpacity, Vibration } from 'react-native';
+import { StyleSheet, Image, SafeAreaView, ScrollView, Dimensions, TouchableOpacity, Vibration, Appearance } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Text, View } from '../components/Themed';
@@ -13,7 +13,7 @@ import moment, { Moment } from 'moment';
 import FinishedFixture from './fixtures/FinishedFixture';
 import MiscFixture from './fixtures/MiscFixture';
 import Carousel from 'react-native-snap-carousel';
-import { CUSTOM_COLORS } from '../types/colors';
+import { CUSTOM_COLORS, getTextColourStyle } from '../types/colors';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Spinner } from '../components/Spinner';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -27,6 +27,7 @@ import { RefreshControl } from 'react-native-web-refresh-control'
 
 export default function TabOneScreen(props: any) {
 
+  const cs = Appearance.getColorScheme();
   const { todaysFixtures, oneDayAgoFixtures, twoDaysAgoFixtures, threeDaysAgoFixtures, fourDaysAgoFixtures, fiveDaysAgoFixtures, sixDaysAgoFixtures, sevenDaysAgoFixtures,
     oneDayFutureFixtures, twoDaysFutureFixtures, threeDaysFutureFixtures, fourDaysFutureFixtures, fiveDaysFutureFixtures, sixDaysFutureFixtures, sevenDaysFutureFixtures, favouriteTeams } = useSelector(state => state.fixturesReducer);
   const dispatch = useDispatch();
@@ -470,7 +471,7 @@ export default function TabOneScreen(props: any) {
                             <List.Section style={styles.listSection} key={i}>
                               <List.Accordion
                                 style={{ backgroundColor: CUSTOM_COLORS.lightSafetyYellow }}
-                                title={fixture[0].league.name}
+                                title={fixture[0].league.name} titleStyle={{color: 'black'}}
                                 left={props => <Image style={styles.leagueLogo} source={{ uri: fixture[0].league.logo }} />}>
                                 {fixture.map((match: any, j: number) => {
                                   if (match.fixture.status.short === 'NS') {

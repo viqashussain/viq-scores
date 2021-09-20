@@ -17,7 +17,7 @@ import TabOneScreen from '../screens/TabOneScreen';
 import { RootStackParamList } from '../types';
 import { CUSTOM_COLORS } from '../types/colors';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import Modal from 'modal-react-native-web';
+// import Modal from 'modal-react-native-web';
 
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
@@ -72,7 +72,7 @@ function HomeStackScreen() {
           }} name="info" size={25} color={CUSTOM_COLORS.safetyYellow} />
 
           <View style={{ marginTop: 22 }}>
-            <Modal
+            {/* <Modal
               animationType="slide"
               transparent={false}
               visible={visible}
@@ -92,7 +92,7 @@ function HomeStackScreen() {
                   </Pressable>
                 </View>
               </View>
-            </Modal>
+            </Modal> */}
           </View>
           </TouchableOpacity>}} />
       <HomeStack.Screen name="Match" component={Match} options={{ headerTitle: props => <LogoTitle title="Match" /> }} />

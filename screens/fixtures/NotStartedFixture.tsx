@@ -62,11 +62,13 @@ const styles = StyleSheet.create({
     },
     matchStatus: {
         fontWeight: 'bold',
-        zIndex: 999999999
+        zIndex: 999999999,
+        color: 'black'
     },
     teamName: {
         paddingLeft: 10,
         fontSize: 14,
+        color: 'black'
     },
     goalsCount: {
         fontSize: 20,

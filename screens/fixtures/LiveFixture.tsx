@@ -77,7 +77,8 @@ const styles = StyleSheet.create({
     },
     matchMinute: {
         fontStyle: 'italic',
-        zIndex: 9999999
+        zIndex: 9999999,
+        color: 'black'
     },
     matchStatusContainer: {
         justifyContent: 'center', //Centered vertically
@@ -88,6 +89,7 @@ const styles = StyleSheet.create({
     teamName: {
         paddingLeft: 10,
         fontSize: 14,
+        color: 'black'
     },
     goalsCount: {
         fontSize: 20,

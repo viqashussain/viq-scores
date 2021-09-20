@@ -38,7 +38,7 @@ export default function FinishedFixture(props: { match: Fixture, navigation: any
                 {
                     props.match.fixture.status.short == 'PEN' ?
                         <View style={{ backgroundColor: CUSTOM_COLORS.safetyYellow }}>
-                            <Text style={{ zIndex: 999999, textAlign: 'center', fontWeight: 'bold', paddingTop: 3, paddingBottom: 3 }}>{getPenStatus(props.match)}</Text>
+                            <Text style={{ zIndex: 999999, textAlign: 'center', fontWeight: 'bold', paddingTop: 3, paddingBottom: 3, color: 'black' }}>{getPenStatus(props.match)}</Text>
                         </View>
                         :
                         <View></View>
@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
     },
     matchStatus: {
         fontWeight: 'bold',
-        zIndex: 999999
+        zIndex: 999999,
+        color: 'black'
     },
     matchStatusContainer: {
         justifyContent: 'center', //Centered vertically
@@ -84,10 +85,12 @@ const styles = StyleSheet.create({
     teamName: {
         paddingLeft: 10,
         fontSize: 14,
+        color: 'black'
     },
     goalsCount: {
         fontSize: 20,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: 'black'
     },
     listItem: {
         paddingTop: 0,

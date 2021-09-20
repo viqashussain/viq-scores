@@ -264,9 +264,9 @@ export default function Match({ route, navigation }) {
                                         colors={[CUSTOM_COLORS.lightSafetyYellow, 'white']}
                                         style={styles.linearBackground}
                                     />
-                                    <Text style={{ textAlign: 'center', zIndex: 999 }}>{convertUtcDateToLocal(fixtureDetails.fixture.date)}</Text>
-                                    <Text style={{ textAlign: 'center', zIndex: 999 }}>{fixtureDetails.fixture.venue.name}</Text>
-                                    <Text style={{ textAlign: 'center', zIndex: 999 }}>{fixtureDetails.league.name} ({fixtureDetails.league.round})</Text>
+                                    <Text style={{ textAlign: 'center', zIndex: 999, color: 'black' }}>{convertUtcDateToLocal(fixtureDetails.fixture.date)}</Text>
+                                    <Text style={{ textAlign: 'center', zIndex: 999, color: 'black' }}>{fixtureDetails.fixture.venue.name}</Text>
+                                    <Text style={{ textAlign: 'center', zIndex: 999, color: 'black' }}>{fixtureDetails.league.name} ({fixtureDetails.league.round})</Text>
                                 </View>
                                 <Divider />
 
@@ -280,6 +280,7 @@ export default function Match({ route, navigation }) {
 
                                     <List.Item titleStyle={styles.teamName}
                                         description={homeGoalScorersOwnGoalsAndRedCards}
+                                        descriptionStyle={{color: 'black'}}
                                         title={`${fixtureDetails.teams.home.name}`}
                                         left={props => {
                                             return (
@@ -303,6 +304,7 @@ export default function Match({ route, navigation }) {
                                         right={props => <Text style={styles.score}>{`${fixtureDetails.goals.home ?? '-'}`}</Text>} />
                                     <List.Item titleStyle={styles.teamName}
                                         description={awayGoalScorersOwnGoalsAndRedCards}
+                                        descriptionStyle={{color: 'black'}}
                                         title={`${fixtureDetails.teams.away.name}`}
                                         left={props => {
                                             return (
@@ -382,12 +384,14 @@ const styles = StyleSheet.create({
     teamName: {
         fontSize: 20,
         fontWeight: 'bold',
+        color: 'black'
     },
     score: {
         fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',
-        paddingRight: 10
+        paddingRight: 10,
+        color: 'black'
     },
     logoImage: {
         height: 40,
@@ -417,7 +421,8 @@ const styles = StyleSheet.create({
     },
     fixtureStatusText: {
         fontWeight: 'bold',
-        backgroundColor: CUSTOM_COLORS.safetyYellow
+        backgroundColor: CUSTOM_COLORS.safetyYellow,
+        color: 'black'
     },
     matchStatusContainerBackground: {
         position: 'absolute',
@@ -431,7 +436,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         top: 0,
-        height: 50
+        height: 75
     },
 });
 

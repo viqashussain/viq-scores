@@ -21,15 +21,14 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { Text, View } from './components/Themed';
-import { StyleSheet } from 'react-native';
+import { Appearance, StyleSheet } from 'react-native';
 
 
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
-  const colorScheme = useColorScheme();
 
   if (!isLoadingComplete) {
     return (
@@ -40,7 +39,7 @@ export default function App() {
       <SafeAreaProvider>
         <Provider store={store}>
           <PaperProvider>
-            <Navigation colorScheme={colorScheme} />
+            <Navigation colorScheme={'light'} />
             <StatusBar />
           </PaperProvider>
         </Provider>
