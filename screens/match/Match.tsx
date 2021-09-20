@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { View, Text } from '../../components/Themed';
 import { StyleSheet, Image, SafeAreaView, ScrollView, useWindowDimensions, RefreshControl, TouchableOpacity } from 'react-native';
-import { ActivityIndicator, Card, Colors, Divider } from 'react-native-paper';
+import { ActivityIndicator, Button, Card, Colors, Divider } from 'react-native-paper';
 import { getFixtureDetails, GET_FIXTURE_DETAILS, SET_FAVOURITE_TEAMS } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { List } from 'react-native-paper';
@@ -237,17 +237,15 @@ export default function Match({ route, navigation }) {
     return (
         <View style={styles.container}>
             {
+                refreshing ? (<Spinner />) : 
                 !isLoaded || !fixtureDetails ? (
                     <Spinner />
                 )
                     : (
 
                         <SafeAreaView style={styles.container}>
-                            <ScrollView refreshControl={
-                                <RefreshControl
-                                    refreshing={refreshing}
-                                    onRefresh={onRefresh}
-                                />} style={styles.scrollView}>
+                            <Button icon={'refresh'} color={'black'} labelStyle={{fontWeight: 'bold'}} style={{width: '100%', display: 'flex', backgroundColor: CUSTOM_COLORS.lightSafetyYellow, margin: 5}} onPress={onRefresh} >Refresh</Button>
+                            <ScrollView  style={styles.scrollView}>
                                 <View style={styles.matchStatusContainer}>
                                     <Text style={[styles.textCenter, styles.fixtureStatusText]}>{fixtureDetails.fixture.status.long}
                                         {fixtureDetails.fixture.status.short === '1H'

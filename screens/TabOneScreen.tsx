@@ -383,17 +383,15 @@ export default function TabOneScreen(props: any) {
           onSnapToItem={index => dateSelectedNew(index)} />
       </View>
       {
+        refreshing ? (<Spinner />) : 
         !isLoaded ? (
           <Spinner />
         )
           : (
             <View style={styles.container}>
               <SafeAreaView style={styles.container}>
-                <ScrollView refreshControl={
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />} style={styles.scrollView}>
+              <Button icon={'refresh'} color={'black'} labelStyle={{fontWeight: 'bold'}} style={{width: '100%', display: 'flex', backgroundColor: CUSTOM_COLORS.lightSafetyYellow, margin: 5}} onPress={onRefresh} >Refresh</Button>
+                <ScrollView  style={styles.scrollView}>
 
                   {/* <CalendarDays
                   // First day. Default = new Date()
