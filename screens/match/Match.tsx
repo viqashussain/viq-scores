@@ -337,7 +337,7 @@ export default function Match({ route, navigation }) {
                                     }
                                 </View>
                                 {
-                                    fixtureDetails.events?.length ?
+                                    fixtureDetails.events?.length || fixtureDetails.lineups?.length ?
                                         (
                                             <TabView
                                                 navigationState={{ index, routes }}
