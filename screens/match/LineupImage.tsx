@@ -57,7 +57,7 @@ function getLineupArray(lineup: any, isAwayTeam = false)
     {
         formation.split('-').forEach((x: any) => {
             const players = lineup.startXI.slice(currentPlayerInLineup, parseInt(x) + currentPlayerInLineup);
-            lineupToReturn.push(players.map((y: any) => y.player));
+            lineupToReturn.push(players.map((y: any) => y.player).reverse());
     
             currentPlayerInLineup += parseInt(x);
         });

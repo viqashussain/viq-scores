@@ -30,8 +30,6 @@ const initialState = {
 };
 
 function fixturesReducer(state = initialState, action: any) {
-    console.log('in reducer')
-    console.log('action.type: ' + action.type);
     switch (action.type) {
         case GET_TODAYS_FIXTURES:
             return { ...state, todaysFixtures: reorderFixtureByPopularity(action.payload) };
