@@ -28,7 +28,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.viqash12.viqscores"
+      "package": "com.viqash12.viqscores",
+      "permissions": []
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
