@@ -237,126 +237,128 @@ export default function Match({ route, navigation }) {
     return (
         <View style={styles.container}>
             {
-                refreshing ? (<Spinner />) : 
-                !isLoaded || !fixtureDetails ? (
-                    <Spinner />
-                )
-                    : (
-
-                        <SafeAreaView style={styles.container}>
-                            <Button icon={'refresh'} color={'black'} labelStyle={{fontWeight: 'bold'}} style={{width: '100%', display: 'flex', backgroundColor: CUSTOM_COLORS.lightSafetyYellow, margin: 5}} onPress={onRefresh} >Refresh</Button>
-                            <ScrollView  style={styles.scrollView}>
-                                <View style={styles.matchStatusContainer}>
-                                    <Text style={[styles.textCenter, styles.fixtureStatusText]}>{fixtureDetails.fixture.status.long}
-                                        {fixtureDetails.fixture.status.short === '1H'
-                                            || fixtureDetails.fixture.status.short === '2H'
-                                            || fixtureDetails.fixture.status.short === 'ET' ?
-                                            `- ${fixtureDetails.fixture.status.elapsed}'` : ` - ${fixtureDetails.fixture.status.short}`}
-                                    </Text>
-                                </View>
-                                <View>
-
-                                </View>
-                                <Divider />
-                                <View style={styles.matchDetailsContainer}>
-                                    <LinearGradient
-                                        // Background Linear Gradient
-                                        colors={[CUSTOM_COLORS.lightSafetyYellow, 'white']}
-                                        style={styles.linearBackground}
-                                    />
-                                    <Text style={{ textAlign: 'center', zIndex: 999, color: 'black' }}>{convertUtcDateToLocal(fixtureDetails.fixture.date)}</Text>
-                                    <Text style={{ textAlign: 'center', zIndex: 999, color: 'black' }}>{fixtureDetails.fixture.venue.name}</Text>
-                                    <Text style={{ textAlign: 'center', zIndex: 999, color: 'black' }}>{fixtureDetails.league.name} ({fixtureDetails.league.round})</Text>
-                                </View>
-                                <Divider />
-
-                                <View style={styles.teamScoreContainer}>
-
-                                    <LinearGradient
-                                        // Background Linear Gradient
-                                        colors={[CUSTOM_COLORS.safetyYellow, 'white', CUSTOM_COLORS.acidGreen]}
-                                        style={styles.matchStatusContainerBackground}
-                                    />
-
-                                    <List.Item titleStyle={styles.teamName}
-                                        description={homeGoalScorersOwnGoalsAndRedCards}
-                                        descriptionStyle={{color: 'black'}}
-                                        title={`${fixtureDetails.teams.home.name}`}
-                                        left={props => {
-                                            return (
-                                                <View style={{ display: 'flex', flexDirection: 'row', backgroundColor: 'transparent' }}>
-                                                    <View style={{ backgroundColor: 'transparent' }}>
-                                                        {
-                                                            favouriteTeams.findIndex(y => y.id === fixtureDetails.teams.home.id) != -1 ?
-                                                                <TouchableOpacity style={{ paddingTop: 10, paddingRight: 5 }} onPress={() => removeTeamFromFavourites(fixtureDetails.teams.home.id)}>
-                                                                    <Icon name="star" size={20} color={CUSTOM_COLORS.safetyYellow} />
-                                                                </TouchableOpacity> :
-                                                                <TouchableOpacity style={{ paddingTop: 10, paddingRight: 5 }} onPress={() => addTeamToFavourites(fixtureDetails.teams.home.id)}>
-                                                                    <Icon name="star-o" size={20} color={CUSTOM_COLORS.safetyYellow} />
-                                                                </TouchableOpacity>
-                                                        }
-
-                                                    </View>
-                                                    <Image style={styles.logoImage} source={{ uri: fixtureDetails.teams.home.logo }} />
-                                                </View>
-                                            )
-                                        }}
-                                        right={props => <Text style={styles.score}>{`${fixtureDetails.goals.home ?? '-'}`}</Text>} />
-                                    <List.Item titleStyle={styles.teamName}
-                                        description={awayGoalScorersOwnGoalsAndRedCards}
-                                        descriptionStyle={{color: 'black'}}
-                                        title={`${fixtureDetails.teams.away.name}`}
-                                        left={props => {
-                                            return (
-                                                <View style={{ display: 'flex', flexDirection: 'row', backgroundColor: 'transparent' }}>
-                                                    <View style={{ backgroundColor: 'transparent' }}>
-                                                        {
-                                                            favouriteTeams.findIndex(y => y.id === fixtureDetails.teams.away.id) != -1 ?
-                                                                <TouchableOpacity style={{ paddingTop: 10, paddingRight: 5 }} onPress={() => removeTeamFromFavourites(fixtureDetails.teams.away.id)}>
-                                                                    <Icon name="star" size={20} color={CUSTOM_COLORS.safetyYellow} />
-                                                                </TouchableOpacity> :
-                                                                <TouchableOpacity style={{ paddingTop: 10, paddingRight: 5 }} onPress={() => addTeamToFavourites(fixtureDetails.teams.away.id)}>
-                                                                    <Icon name="star-o" size={20} color={CUSTOM_COLORS.safetyYellow} />
-                                                                </TouchableOpacity>
-                                                        }
-
-                                                    </View>
-                                                    <Image style={styles.logoImage} source={{ uri: fixtureDetails.teams.away.logo }} />
-                                                </View>
-                                            )
-                                        }}
-                                        right={props => <Text style={styles.score}>{`${fixtureDetails.goals.away ?? '-'}`}</Text>} />
-
-                                    {
-                                        fixtureDetails.fixture.status.short == 'PEN' ?
-                                            <View style={{ backgroundColor: CUSTOM_COLORS.safetyYellow }}>
-                                                <Text style={{ textAlign: 'center', fontWeight: 'bold', paddingTop: 3, paddingBottom: 3 }}>{getPenStatus(fixtureDetails)}</Text>
-                                            </View>
-                                            :
-                                            <View></View>
-                                    }
-                                </View>
-                                {
-                                    fixtureDetails.events?.length || fixtureDetails.lineups?.length ?
-                                        (
-                                            <TabView
-                                                navigationState={{ index, routes }}
-                                                renderScene={renderScene}
-                                                onIndexChange={setIndex}
-                                                initialLayout={{ width: layout.width }}
-                                                style={{ flex: 1, display: 'flex', height: 1200 }}
-                                                renderTabBar={renderTabBar}
-                                            />
-                                        ) :
-                                        (
-                                            <View>
-                                                <Text style={{ fontSize: 20, padding: 20 }}>Match details will be displayed once they are released/the match starts.</Text>
-                                            </View>
-                                        )}
-
-                            </ScrollView>
-                        </SafeAreaView>
+                refreshing ? (<Spinner />) :
+                    !isLoaded || !fixtureDetails ? (
+                        <Spinner />
                     )
+                        : (
+
+                            <SafeAreaView style={styles.container}>
+                                <Button icon={'refresh'} color={'black'} labelStyle={{ fontWeight: 'bold' }} style={{ width: '100%', display: 'flex', backgroundColor: CUSTOM_COLORS.lightSafetyYellow, margin: 5 }} onPress={onRefresh} >Refresh</Button>
+                                <ScrollView style={styles.scrollView}>
+                                    <View style={styles.matchStatusContainer}>
+                                        <Text style={[styles.textCenter, styles.fixtureStatusText]}>{fixtureDetails.fixture.status.long}
+                                            {fixtureDetails.fixture.status.short === '1H'
+                                                || fixtureDetails.fixture.status.short === '2H'
+                                                || fixtureDetails.fixture.status.short === 'ET' ?
+                                                `- ${fixtureDetails.fixture.status.elapsed}'` : ` - ${fixtureDetails.fixture.status.short}`}
+                                        </Text>
+                                    </View>
+                                    <View>
+
+                                    </View>
+                                    <Divider />
+                                    <View style={styles.matchDetailsContainer}>
+                                        <LinearGradient
+                                            // Background Linear Gradient
+                                            colors={[CUSTOM_COLORS.lightSafetyYellow, 'white']}
+                                            style={styles.linearBackground}
+                                        />
+                                        <Text style={{ textAlign: 'center', zIndex: 999, color: 'black' }}>{convertUtcDateToLocal(fixtureDetails.fixture.date)}</Text>
+                                        <Text style={{ textAlign: 'center', zIndex: 999, color: 'black' }}>{fixtureDetails.fixture.venue.name}</Text>
+                                        <Text style={{ textAlign: 'center', zIndex: 999, color: 'black' }}>{fixtureDetails.league.name} ({fixtureDetails.league.round})</Text>
+                                    </View>
+                                    <Divider />
+
+                                    <View style={styles.teamScoreContainer}>
+
+                                        <LinearGradient
+                                            // Background Linear Gradient
+                                            colors={[CUSTOM_COLORS.safetyYellow, 'white', CUSTOM_COLORS.acidGreen]}
+                                            style={styles.matchStatusContainerBackground}
+                                        />
+
+                                        <List.Item titleStyle={styles.teamName}
+                                            description={homeGoalScorersOwnGoalsAndRedCards}
+                                            descriptionStyle={{ color: 'black' }}
+                                            title={`${fixtureDetails.teams.home.name}`}
+                                            left={props => {
+                                                return (
+                                                    <View style={{ display: 'flex', flexDirection: 'row', backgroundColor: 'transparent' }}>
+                                                        <View style={{ backgroundColor: 'transparent' }}>
+                                                            {
+                                                                favouriteTeams.findIndex(y => y.id === fixtureDetails.teams.home.id) != -1 ?
+                                                                    <TouchableOpacity style={{ paddingTop: 10, paddingRight: 5 }} onPress={() => removeTeamFromFavourites(fixtureDetails.teams.home.id)}>
+                                                                        <Icon name="star" size={20} color={CUSTOM_COLORS.safetyYellow} />
+                                                                    </TouchableOpacity> :
+                                                                    <TouchableOpacity style={{ paddingTop: 10, paddingRight: 5 }} onPress={() => addTeamToFavourites(fixtureDetails.teams.home.id)}>
+                                                                        <Icon name="star-o" size={20} color={CUSTOM_COLORS.safetyYellow} />
+                                                                    </TouchableOpacity>
+                                                            }
+
+                                                        </View>
+                                                        <Image style={styles.logoImage} source={{ uri: fixtureDetails.teams.home.logo }} />
+                                                    </View>
+                                                )
+                                            }}
+                                            right={props => <Text style={styles.score}>{`${fixtureDetails.goals.home ?? '-'}`}</Text>} />
+                                        <List.Item titleStyle={styles.teamName}
+                                            description={awayGoalScorersOwnGoalsAndRedCards}
+                                            descriptionStyle={{ color: 'black' }}
+                                            title={`${fixtureDetails.teams.away.name}`}
+                                            left={props => {
+                                                return (
+                                                    <View style={{ display: 'flex', flexDirection: 'row', backgroundColor: 'transparent' }}>
+                                                        <View style={{ backgroundColor: 'transparent' }}>
+                                                            {
+                                                                favouriteTeams.findIndex(y => y.id === fixtureDetails.teams.away.id) != -1 ?
+                                                                    <TouchableOpacity style={{ paddingTop: 10, paddingRight: 5 }} onPress={() => removeTeamFromFavourites(fixtureDetails.teams.away.id)}>
+                                                                        <Icon name="star" size={20} color={CUSTOM_COLORS.safetyYellow} />
+                                                                    </TouchableOpacity> :
+                                                                    <TouchableOpacity style={{ paddingTop: 10, paddingRight: 5 }} onPress={() => addTeamToFavourites(fixtureDetails.teams.away.id)}>
+                                                                        <Icon name="star-o" size={20} color={CUSTOM_COLORS.safetyYellow} />
+                                                                    </TouchableOpacity>
+                                                            }
+
+                                                        </View>
+                                                        <Image style={styles.logoImage} source={{ uri: fixtureDetails.teams.away.logo }} />
+                                                    </View>
+                                                )
+                                            }}
+                                            right={props => <Text style={styles.score}>{`${fixtureDetails.goals.away ?? '-'}`}</Text>} />
+
+                                        {
+                                            fixtureDetails.fixture.status.short == 'PEN' ?
+                                                <View style={{ backgroundColor: CUSTOM_COLORS.safetyYellow }}>
+                                                    <Text style={{ textAlign: 'center', fontWeight: 'bold', paddingTop: 3, paddingBottom: 3 }}>{getPenStatus(fixtureDetails)}</Text>
+                                                </View>
+                                                :
+                                                <View></View>
+                                        }
+                                    </View>
+                                    {
+                                        fixtureDetails.events?.length || fixtureDetails.lineups?.length ?
+                                            (
+                                                <View style={{ height: 1200 }}>
+                                                    <TabView
+                                                        navigationState={{ index, routes }}
+                                                        renderScene={renderScene}
+                                                        onIndexChange={setIndex}
+                                                        initialLayout={{ width: layout.width }}
+                                                        style={{ flex: 1, display: 'flex', height: 1200 }}
+                                                        renderTabBar={renderTabBar}
+                                                    />
+                                                </View>
+                                            ) :
+                                            (
+                                                <View>
+                                                    <Text style={{ fontSize: 20, padding: 20 }}>Match details will be displayed once they are released/the match starts.</Text>
+                                                </View>
+                                            )}
+
+                                </ScrollView>
+                            </SafeAreaView>
+                        )
             }
 
         </View >

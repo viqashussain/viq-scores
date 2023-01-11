@@ -59,7 +59,7 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
                         {
                             props.fixtureDetails.lineups[0] && props.fixtureDetails.lineups[0].startXI ?
                             props.fixtureDetails.lineups[0].startXI.map((x, i: number) => (
-                                <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />
+                                <LineupSection key={i} i={i} player={x} fixtureDetails={props.fixtureDetails} />
                             ))
                             : null
                         }
@@ -68,7 +68,7 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
 
                         {
                             props.fixtureDetails.lineups[0] && props.fixtureDetails.lineups[0].startXI ?
-                            props.fixtureDetails.lineups[0].substitutes.map((x, i: number) => <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />)
+                            props.fixtureDetails.lineups[0].substitutes.map((x, i: number) => <LineupSection key={i} i={i} player={x} fixtureDetails={props.fixtureDetails} />)
                             : null
                         }
 
@@ -95,7 +95,7 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
 
                         {
                             props.fixtureDetails.lineups[1] && props.fixtureDetails.lineups[1].startXI ?
-                            props.fixtureDetails.lineups[1].startXI.map((x, i: number) => <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />)
+                            props.fixtureDetails.lineups[1].startXI.map((x, i: number) => <LineupSection key={i} i={i} player={x} fixtureDetails={props.fixtureDetails} />)
                             : null
                         }
 
@@ -103,7 +103,7 @@ export default function LineupTabs(props: { fixtureDetails: Fixture }) {
 
                         {
                             props.fixtureDetails.lineups[1] && props.fixtureDetails.lineups[1].startXI ?
-                            props.fixtureDetails.lineups[1].substitutes.map((x, i: number) => <LineupSection i={i} player={x} fixtureDetails={props.fixtureDetails} />)
+                            props.fixtureDetails.lineups[1].substitutes.map((x, i: number) => <LineupSection key={i} i={i} player={x} fixtureDetails={props.fixtureDetails} />)
                             : null
                         }
 

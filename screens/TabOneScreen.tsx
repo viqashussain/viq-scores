@@ -451,7 +451,7 @@ export default function TabOneScreen(props: any) {
                       // if (i > 0) {
                       //   return;
                       // }
-                      return <View style={{ display: 'flex', flexDirection: 'row' }}>
+                      return <View key={i} style={{ display: 'flex', flexDirection: 'row' }}>
 
                         {
                           fixture?.length ?
