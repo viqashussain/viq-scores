@@ -34,7 +34,7 @@ export const GET_LEAGUE_STANDINGS = 'GET_LEAGUE_STANDINGS';
 
 const rapidApiHeaders = {
   headers: {
-    'x-rapidapi-key': 'd241f0783fmshdda528fa7e70127p1dae6cjsnd6bed51ff1d7',
+    'x-rapidapi-key': '',
     'x-rapidapi-host': 'api-football-v1.p.rapidapi.com'
   }
 }
